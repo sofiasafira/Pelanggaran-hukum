@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 // bagian admin
 Route::get('/', [UserController::class, 'home']);
 
-Route::get('/dashboard', [UserController::class, 'index']);
+Route::get('/landing-page', [UserController::class, 'index']);
 
 Route::get('/login', [UserController::class, 'login']);
+
+Route::get('/dashboard', [UserController::class, 'dashboard']);

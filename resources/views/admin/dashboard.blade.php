@@ -28,23 +28,29 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/">Home</a>
+                    <a class="nav-link active" href="/">pn_sabang</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/">About</a>
-                </li>        
             </ul>
         </div>
     </div>
    </nav>
 
+   
     <div class="container mt-4">
+       <button type="button" class="btn btn-success">Tambah data selembaran</button>
+    </div>
 
-      @yield('containeradmin')
-    
+    <div class="container" style="background-color: red; height: 700px; " >
+        <h1>isi content dashboad</h1>
+    </div>
+
+    <div class="container" style="height: 300px">
+
     </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
   </body>
 </html>
+
+

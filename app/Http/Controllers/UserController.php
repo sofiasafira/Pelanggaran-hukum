@@ -28,4 +28,11 @@ class UserController extends Controller
             "title" => "login"
         ]);
     }
+
+    public function dashboard()
+    {
+        return view('admin.dashboard', [
+            "title" => "dashboard"
+        ]);
+    }
 }
