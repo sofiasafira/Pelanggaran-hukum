@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,20 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home', [
-        "title" => "Home"
-    ]);
-});
 
-Route::get('/dashboard', function () {
-    return view('index', [
-        "title" => "Dashboard"
-    ]);
-});
+// bagian admin
+Route::get('/', [UserController::class, 'home']);
 
-Route::get('/login', function () {
-    return view('login', [
-        "title" => "login"
-    ]);
-});
+Route::get('/landing-page', [UserController::class, 'index']);
+
+Route::get('/login', [UserController::class, 'login']);
+Route::post('/login', [UserController::class, 'authenticate']);
+
+Route::get('/dashboard', [UserController::class, 'dashboard']);
