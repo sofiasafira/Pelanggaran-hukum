@@ -37,17 +37,34 @@ class UserController extends Controller
             'password' => 'required'
         ]);
 
+        $credentials = $request->only('username', 'password');
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/dashboard');
+            return redirect()->intended('dashboard');
         }
+
+        return back()->with('loginError', 'Login failed');
     }
 
     public function dashboard()
     {
         return view('admin.dashboard', [
             "title" => "dashboard"
+        ]);
+    }
+
+    public function data_pelanggaran()
+    {
+        return view('admin.data_pelanggaran', [
+            "title" => "data_pelanggaran"
+        ]);
+    }
+
+    public function add_data()
+    {
+        return view('admin.add_data', [
+            "title" => "add_data"
         ]);
     }
 }
