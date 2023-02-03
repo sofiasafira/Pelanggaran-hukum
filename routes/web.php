@@ -26,3 +26,4 @@ Route::post('/login', [UserController::class, 'authenticate']);
 Route::get('/dashboard', [UserController::class, 'dashboard']);
 
 Route::get('/data_pelanggaran', [UserController::class, 'data_pelanggaran']);
+Route::get('/add_data', [UserController::class, 'add_data']);

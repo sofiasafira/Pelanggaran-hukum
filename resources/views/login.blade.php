@@ -3,6 +3,14 @@
 @section('containeradmin')
 <div class="row justify-content-center" >
   <div class="col-md-4">
+
+    @if(session()->has('loginError'))
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('loginError') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    @endif
+
   <main class="form-signin w-100 m-auto">
  
     <form action="/login" method="POST">
@@ -16,7 +24,7 @@
       @error('username')
         <div class="invalid-feedback">
           {{ $message }}
-        </div>
+        </div>  
       @enderror
     </div>
     <div class="form-floating">

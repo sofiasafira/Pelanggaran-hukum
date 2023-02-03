@@ -26,11 +26,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/">{{ auth()->user()->username}}</a>
-                </li>
-            </ul>
+          <button type="button" class="btn navbar-nav ms-auto border-0" \ ><a class="nav-link active" href="/">{{ auth()->user()->username}}</a></button>
         </div>
     </div>
    </nav>
@@ -40,7 +36,7 @@
        <button type="button" class="btn btn-success">Tambah data selembaran</button>
     </div>
 
-    <div class="container" style="background-color: red; height: 700px; " >
+    <div class="container dashboard" style="background-color: red; height: 700px; " >
         <h1>isi content dashboad</h1>
     </div>
 

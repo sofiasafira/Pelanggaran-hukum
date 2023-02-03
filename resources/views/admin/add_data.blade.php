@@ -40,14 +40,26 @@
        <button type="button" class="btn btn-success">Tambah data selembaran</button>
     </div>
 
-    <div class="container" style="background-color: red; height: 700px; " >
-        <h1>isi content dashboad</h1>
+    <div class="container mt-4">
+      <table class="table table-striped">
+        <tr>
+          <th>Kode</th>
+          <th>Tanggal Putusan</th>
+          <th>Direktori</th>
+          <th>Klasifikasi</th>
+          <th>Aksi</th>
+        </tr>
+        <tr>
+          <td>Alfreds Futterkiste</td>
+          <td>Maria Anders</td>
+          <td>Germany</td>
+          <td>Germany</td>
+          <td>Germany</td>
+        </tr>
+      </table>
+
     </div>
-
-    <div class="container" style="height: 300px">
-
-    </div>
-
+      
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
   </body>

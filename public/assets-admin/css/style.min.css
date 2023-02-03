@@ -41,3 +41,8 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
+
+.dashboard{
+  margin-top: 30px;
+}
