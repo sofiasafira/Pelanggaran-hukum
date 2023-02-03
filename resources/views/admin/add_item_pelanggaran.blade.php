@@ -35,30 +35,54 @@
     </div>
    </nav>
 
-   
-    <div class="container mt-4">
-       <button type="button" class="btn btn-success"><a href="add_item_pelanggaran">Tambah data selembaran</a></button>
-    </div>
+   <main class="form-signin w-100 m-auto">
+ 
+    <form action="/login" method="POST">
+      @csrf
+<!--     <img class="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+ -->    <h1 class="h3 mb-3 fw-normal block justify-content-center">Masukkan Item</h1>
 
-    <div class="container mt-4">
-      <table class="table table-striped">
-        <tr>
-          <th>Kode</th>
-          <th>Tanggal Putusan</th>
-          <th>Direktori</th>
-          <th>Klasifikasi</th>
-          <th>Aksi</th>
-        </tr>
-        <tr>
-          <td>Alfreds Futterkiste</td>
-          <td>Maria Anders</td>
-          <td>Germany</td>
-          <td>Germany</td>
-          <td>Germany</td>
-        </tr>
-      </table>
-
+    
+    <div class="form-floating">
+      <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" placeholder="Password">
+      <label for="password">kode pelanggaran</label>
+      @error('password')
+      <div class="invalid-feedback">
+        {{ $message }}
+      </div>
+      @enderror
     </div>
+    <div class="form-floating">
+      <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" placeholder="Password">
+      <label for="password">tanggal putusan</label>
+      @error('password')
+      <div class="invalid-feedback">
+        {{ $message }}
+      </div>
+      @enderror
+    </div>
+    <div class="form-floating">
+      <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" placeholder="Password">
+      <label for="password">Direktori</label>
+      @error('password')
+      <div class="invalid-feedback">
+        {{ $message }}
+      </div>
+      @enderror
+    </div>
+    <div class="form-floating">
+      <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="password" placeholder="Password">
+      <label for="password">Klasifikasi</label>
+      @error('password')
+      <div class="invalid-feedback">
+        {{ $message }}
+      </div>
+      @enderror
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+  </form>
+</main>
+
       
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>

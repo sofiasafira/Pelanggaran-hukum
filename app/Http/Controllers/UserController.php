@@ -67,4 +67,12 @@ class UserController extends Controller
             "title" => "add_data"
         ]);
     }
+
+
+    public function add_item_pelanggaran()
+    {
+        return view('admin.add_item_pelanggaran', [
+            "title" => "add_item_pelanggaran"
+        ]);
+    }
 }

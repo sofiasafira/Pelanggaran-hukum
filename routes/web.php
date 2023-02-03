@@ -27,3 +27,4 @@ Route::get('/dashboard', [UserController::class, 'dashboard']);
 
 Route::get('/data_pelanggaran', [UserController::class, 'data_pelanggaran']);
 Route::get('/add_data', [UserController::class, 'add_data']);
+Route::get('/add_item_pelanggaran', [UserController::class, 'add_item_pelanggaran']);
