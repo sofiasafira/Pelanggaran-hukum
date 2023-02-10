@@ -43,7 +43,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/login">Login PN</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item"> 
                             <a class="nav-link" href="/about">About</a>
                         </li>
                     </ul>

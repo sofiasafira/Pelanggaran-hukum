@@ -18,7 +18,6 @@
   <body>
   <nav class="navbar navbar-expand navbar-dark" style="background-color: #198754">
     <div class="container">
-
         <a class="navbar-brand" href="#">
           <img src="assets-admin\image\logo.png" alt="..." width="50px" style="margin-right: 20px"><a class="navbar-brand" href="#page-top">Peta Sebaran Pelanggaran Hukum Peradilan Umum</a>
           {{-- SEBARAN PELANGGARAN HUKUM PERADILAN UMUM ACEH --}}
@@ -29,23 +28,41 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/">Home</a>
+                    <a class="nav-link active" href="/">{{ auth()->user()->username}}</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/">About</a>
-                </li>        
             </ul>
         </div>
     </div>
    </nav>
 
+   
     <div class="container mt-4">
-
-      @yield('containeradmin')
-    
+       <button type="button" class="btn btn-success"><a href="add_item_pelanggaran">Tambah data selembaran</a></button>
     </div>
 
+    <div class="container mt-4">
+      <table class="table table-striped">
+        <tr>
+          <th>Kode</th>
+          <th>Tanggal Putusan</th>
+          <th>Direktori</th>
+          <th>Klasifikasi</th>
+          <th>Aksi</th>
+        </tr>
+        <tr>
+          <td>Alfreds Futterkiste</td>
+          <td>Maria Anders</td>
+          <td>Germany</td>
+          <td>Germany</td>
+          <td>Germany</td>
+        </tr>
+      </table>
+
+    </div>
+      
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
   </body>
 </html>
+
+
