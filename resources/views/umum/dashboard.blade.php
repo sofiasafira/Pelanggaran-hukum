@@ -34,7 +34,7 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
             </div>
             <div class="container px-4 px-lg-5">
-            <img src="assets-admin\image\simbol.png" alt="..." width="50px" style="margin-right: 20px"><a class="navbar-brand" href="#page-top">Peta Sebaran Pelanggaran Hukum Peradilan Umum</a>
+            <img src="assets-admin\image\simbol.png" alt="..." width="50px" style="margin-right: 20px"><a class="navbar-brand" href="#page-top">Informasi Sebaran Pelanggaran Hukum</a>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
                     <i class="fas fa-bars"></i>
@@ -117,6 +117,7 @@
         maxZoom: 20,
         subdomains:['mt0','mt1','mt2','mt3']
         }).addTo(map);
+        
         var marker = L.marker([4.3331332, 98.1298214]).addTo(map);
         </script>
     </body>

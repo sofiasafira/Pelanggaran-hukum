@@ -89,9 +89,9 @@
                     </div>
                 </div>
                 <div class="social d-flex justify-content-center">
-                    <a class="mx-2" href="https://www.pt-nad.go.id/new/link/20151028150350590156308166703b3x.html"><i class="fa fa-globe"></i></a>
+                    <a class="mx-2" href="https://www.mahkamahagung.go.id/id"><i class="fa fa-globe"></i></a>
                     <a class="mx-2" href="https://web.facebook.com/pt.aceh"><i class="fab fa-facebook-f"></i></a>
-                    <a class="mx-2" href="https://www.instagram.com/pt.bandaaceh//"><i class="fab fa-instagram"></i></a>
+                    <a class="mx-2" href="https://www.instagram.com/humasmahkamahagung/"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
         </section>
@@ -104,13 +104,13 @@
         <script src="assets-home/js/scripts.js"></script>
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
         
-        <script> 
+        <!-- <script> 
         var map = L.map('map').setView([51.505, -0.09], 13);
         
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map); 
-        </script>
+        </script> -->
     </body>
 </html>
