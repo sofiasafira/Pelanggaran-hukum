@@ -1,225 +1,124 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="en">
+    <head>
+        <title>PelHum | {{ $title }}</title>
+        <link rel="icon" type="image/x-icon" href="assets-admin/image/simbol.png" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PelHum | {{ $title }}</title>
-    <link rel="icon" type="image/x-icon" href="assets-admin/image/logo.png" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    
-    <!-- Link CSS-->
-    <link rel="stylesheet" href="{{asset('assets-admin/css/style.min.css')}}">
-
-            <!-- Include Leaflet CSS file in the head section -->
+        <!-- Link Font dan icon Font -->
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+   
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+        
+        <!-- Link CSS-->
+        <link rel="stylesheet" href="{{asset('assets-layout/css/style.min.css')}}">
+ 
+        <!-- Include Leaflet CSS file in the head section -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin=""/>
 
          <!-- Make sure you put this AFTER Leaflet's CSS -->
         <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js" integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="crossorigin=""></script>
 
-        <style>
-            #map { height: 180px; }
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha512-Dqm3h1Y4qiHUjbhxTuBGQsza0Tfppn53SHlu/uj1f+RT+xfShfe7r6czRf5r2NmllO2aKx+tYJgoxboOkn1Scg==" crossorigin=""></script>
+        <style> 
+            #map { height: 550px; }
         </style>
-
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="{{asset('assets-umum/css/leaflet.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets-umum/css/L.Control.Locate.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets-umum/css/qgis2web.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets-umum/css/fontawesome-all.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets-umum/css/leaflet-search.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets-umum/css/leaflet-control-geocoder.Geocoder.min.css')}}">
-        <link rel="stylesheet" href="{{asset('assets-umum/css/leaflet-measure.min.css')}}">
-        <style>
-        html, body, #map {
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
-        }
-        </style>
-  </head>
-
-  <body>
-  <nav class="navbar navbar-expand navbar-dark bg-success">
-    <div class="container">
-        <a class="navbar-brand" href="#">PETA SEBARAN PELANGGARAN HUKUM PROVINSI ACEH</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">Login PN</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/">About</a>
-                </li>        
-            </ul>
-        </div>
-    </div>
-   </nav>
-
-    <div class="container mt-4">
-
-      @yield('containerumum')
+    </head>
     
-    </div>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: #198754" id="mainNav">
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+            </div>
+            <div class="container px-4 px-lg-5">
+            <img src="assets-admin\image\simbol.png" alt="..." width="50px" style="margin-right: 20px"><a class="navbar-brand" href="#page-top">Peta Sebaran Pelanggaran Hukum Peradilan Umum</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Login PN</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/about">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
+        <div> 
+            @yield('container')
+        </div>
+        <section class="contact-section bg-black">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card py-4 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-map-marked-alt text-primary mb-2"></i>
+                                <h4 class="text-uppercase m-0">Address</h4>
+                                <hr class="my-4 mx-auto" />
+                                <div class="small text-black-50"><a href="https://goo.gl/maps/C82nn4fRBJ67MSUs6">Jl. Sultan Iskandar Muda Jl. Sultan Mahmudsyah No.10, Kp. Baru, Kec. Baiturrahman, Kota Banda Aceh, Aceh 23116</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card py-4 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-envelope text-primary mb-2"></i>
+                                <h4 class="text-uppercase m-0">Email</h4>
+                                <hr class="my-4 mx-auto" />
+                                <div class="small text-black-50"><a href="https://mail.google.com/mail/u/0/?tab=lm#inbox?compose=new">pt.bandaaceh@gmail.com</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card py-4 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-mobile-alt text-primary mb-2"></i>
+                                <h4 class="text-uppercase m-0">Phone</h4>
+                                <hr class="my-4 mx-auto" />
+                                <div class="small text-black-50"> <a href="whatsapp://send?text=Hello&phone=+6282276745102">+62 822 7674 5102</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="social d-flex justify-content-center">
+                    <a class="mx-2" href="https://www.pt-nad.go.id/new/link/20151028150350590156308166703b3x.html"><i class="fa fa-globe"></i></a>
+                    <a class="mx-2" href="https://web.facebook.com/pt.aceh"><i class="fab fa-facebook-f"></i></a>
+                    <a class="mx-2" href="https://www.instagram.com/pt.bandaaceh//"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-
+        <!-- Footer-->
+        <footer class="footer bg-black small text-center text-white-50"><div class="container px-2 px-lg-3">Copyright &copy; PelHum 2022 - Peradilan Umum Aceh</div></footer>
+        <!-- Link Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Link Core theme JS-->
+        <script src="assets-home/js/scripts.js"></script>
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        
         <script> 
-        var map = L.map('map').setView([51.505, -0.09], 13);
-        
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map); 
-        </script>
+        const map = L.map('map').setView([4.3331332, 98.1298214], 6);
 
-        <script src="js/qgis2web_expressions.js"></script>
-        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
-        <script src="js/leaflet.rotatedMarker.js"></script>
-        <script src="js/leaflet.pattern.js"></script>
-        <script src="js/leaflet-hash.js"></script>
-        <script src="js/Autolinker.min.js"></script>
-        <script src="js/rbush.min.js"></script>
-        <script src="js/labelgun.min.js"></script>
-        <script src="js/labels.js"></script>
-        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
-        <script src="js/leaflet-measure.js"></script>
-        <script src="js/leaflet-search.js"></script>
-        <script src="data/acehbaratdaya_1.js"></script>
-        <script>
-        
-        var highlightLayer;
-        function highlightFeature(e) {
-            highlightLayer = e.target;
-            highlightLayer.openPopup();
-        }
-        var map = L.map('map', {
-            zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[2.776600288875623,96.01319239076952],[4.563259907822035,99.20565628669257]]);
-        var hash = new L.Hash(map);
-        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
-        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
-        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
-        var measureControl = new L.Control.Measure({
-            position: 'topleft',
-            primaryLengthUnit: 'meters',
-            secondaryLengthUnit: 'kilometers',
-            primaryAreaUnit: 'sqmeters',
-            secondaryAreaUnit: 'hectares'
-        });
-        measureControl.addTo(map);
-        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
-        .innerHTML = '';
-        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
-        .className += ' fas fa-ruler';
-        var bounds_group = new L.featureGroup([]);
-        function setBounds() {
-        }
-        map.createPane('pane_GoogleSatellite_0');
-        map.getPane('pane_GoogleSatellite_0').style.zIndex = 400;
-        var layer_GoogleSatellite_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-            pane: 'pane_GoogleSatellite_0',
-            opacity: 1.0,
-            attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
-            minZoom: 1,
-            maxZoom: 28,
-            minNativeZoom: 0,
-            maxNativeZoom: 20
-        });
-        layer_GoogleSatellite_0;
-        map.addLayer(layer_GoogleSatellite_0);
-        function pop_acehbaratdaya_1(feature, layer) {
-            layer.on({
-                mouseout: function(e) {
-                    if (typeof layer.closePopup == 'function') {
-                        layer.closePopup();
-                    } else {
-                        layer.eachLayer(function(feature){
-                            feature.closePopup()
-                        });
-                    }
-                },
-                mouseover: highlightFeature,
-            });
-            var popupContent = '<table>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['kode'] !== null ? autolinker.link(feature.properties['kode'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Nama Pengadilan Negeri</th>\
-                        <td>' + (feature.properties['Nama Pengadilan Negeri'] !== null ? autolinker.link(feature.properties['Nama Pengadilan Negeri'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Pelanggaran Pidana Khusus</th>\
-                        <td>' + (feature.properties['Pelanggaran Pidana Khusus'] !== null ? autolinker.link(feature.properties['Pelanggaran Pidana Khusus'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Lokasi</th>\
-                        <td>' + (feature.properties['Lokasi'] !== null ? autolinker.link(feature.properties['Lokasi'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
+        // const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     maxZoom: 19,
+        //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        // }).addTo(map); 
 
-        function style_acehbaratdaya_1_0() {
-            return {
-                pane: 'pane_acehbaratdaya_1',
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(186,20,25,1.0)',
-                interactive: true,
-            }
-        }
-        map.createPane('pane_acehbaratdaya_1');
-        map.getPane('pane_acehbaratdaya_1').style.zIndex = 401;
-        map.getPane('pane_acehbaratdaya_1').style['mix-blend-mode'] = 'normal';
-        var layer_acehbaratdaya_1 = new L.geoJson(json_acehbaratdaya_1, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_acehbaratdaya_1',
-            layerName: 'layer_acehbaratdaya_1',
-            pane: 'pane_acehbaratdaya_1',
-            onEachFeature: pop_acehbaratdaya_1,
-            style: style_acehbaratdaya_1_0,
-        });
-        bounds_group.addLayer(layer_acehbaratdaya_1);
-        map.addLayer(layer_acehbaratdaya_1);
-        var osmGeocoder = new L.Control.Geocoder({
-            collapsed: true,
-            position: 'topleft',
-            text: 'Search',
-            title: 'Testing'
+        googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
         }).addTo(map);
-        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
-        .className += ' fa fa-search';
-        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
-        .title += 'Search for a place';
-        setBounds();
-        map.addControl(new L.Control.Search({
-            layer: layer_acehbaratdaya_1,
-            initial: false,
-            hideMarkerOnCollapse: true,
-            propertyName: 'kode'}));
-        document.getElementsByClassName('search-button')[0].className +=
-         ' fa fa-binoculars';
+        var marker = L.marker([4.3331332, 98.1298214]).addTo(map);
+        var marker2 = L.marker2([5.51937, 95.31916]).addTo(map);
         </script>
     </body>
-  </body>
 </html>
