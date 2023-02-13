@@ -98,12 +98,14 @@
         </section>
 
         <!-- Footer-->
-        <footer class="footer bg-black small text-center text-white-50"><div class="container px-2 px-lg-3">Copyright &copy; PelHum 2022 - Peradilan Umum Aceh</div></footer>
-        <!-- Link Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Link Core theme JS-->
-        <script src="assets-home/js/scripts.js"></script>
-        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    <footer class="footer bg-black small text-center text-white-50">
+        <div class="container px-2 px-lg-3">Copyright &copy; PelHum 2022 - Peradilan Umum Aceh</div>
+    </footer>
+    <!-- Link Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Link Core theme JS-->
+    <script src="assets-home/js/scripts.js"></script>
+    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
         
         <script> 
         const map = L.map('map').setView([4.3331332, 98.1298214], 6);
@@ -118,7 +120,29 @@
         subdomains:['mt0','mt1','mt2','mt3']
         }).addTo(map);
         
-        var marker = L.marker([4.3331332, 98.1298214]).addTo(map);
-        </script>
-    </body>
+        @foreach ($geojson_kabupaten as $list)
+            $.getJSON("{{ $list->geojson_kab }}", function(data) {
+                var geojsonLayer = L.geoJSON(data, {
+                    onEachFeature: function(feature, layer) {
+                        var idCounters = {};
+                        layer.on('click', function() {
+                            layer.bindPopup(
+                            "Kab: {{ $list->nama_kab }} <br> Jumlah Stunting: "
+                            );  
+                    });
+                    map.addLayer(layer);
+                    //mengubh warna geojson
+                }
+            });
+            
+        });
+        @endforeach
+
+        @foreach($titik as $titiks)
+        var marker = L.marker([{{ $titiks->longitude }}, {{ $titiks->latitude}}]).addTo(map);
+        marker.bindPopup("{{ $titiks->nama_pengadilan }}");
+        @endforeach
+
+    </script>
+</body>
 </html>
