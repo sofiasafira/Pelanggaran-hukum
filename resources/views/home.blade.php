@@ -8,7 +8,7 @@
                     <div class="text-center">
                         <h1 class="mx-auto my-0 text-capitalize"> COUNT-PELHUM</h1>
                         <h2 class="text-white-50 mx-auto mt-2 mb-5">Sistem Informasi Geografis Sebaran Pelanggaran Hukum Provinsi Aceh</h2>
-                        <a class="btn btn-primary" href="/dashboard">Lihat Peta Sebaran</a>
+                        <a class="btn btn-primary" href="{{ url('/dashboardumum')}}">Lihat Peta Sebaran</a>
                     </div>
                 </div>
             </div>

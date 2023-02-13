@@ -26,6 +26,8 @@ class CreateUsersTable extends Migration
             $table->string('gambar');
             $table->string('alamat');
             $table->string('website');
+            $table->string('longitude');
+            $table->string('latitude');
             $table->rememberToken();
             $table->timestamps();
         });
