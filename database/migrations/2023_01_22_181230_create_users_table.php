@@ -14,6 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
+
             $table->id(); //id pengadilan
             $table->string('kode_jenis_id');
             $table->foreign('kode_jenis_id')->references('kode_jenis')->on('jenis_pengadilans')->onDelete('cascade');
@@ -25,6 +26,8 @@ class CreateUsersTable extends Migration
             $table->string('gambar');
             $table->string('alamat');
             $table->string('website');
+            $table->string('longitude');
+            $table->string('latitude');
             $table->rememberToken();
             $table->timestamps();
         });

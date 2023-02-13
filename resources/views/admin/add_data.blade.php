@@ -37,7 +37,7 @@
 
    
     <div class="container mt-4">
-       <button type="button" class="btn btn-success">Tambah data selembaran</button>
+       <button type="button" class="btn btn-success"><a href="add_item_pelanggaran">Tambah data selembaran</a></button>
     </div>
 
     <div class="container mt-4">

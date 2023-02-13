@@ -22,7 +22,7 @@ class CreateDataPelanggaransTable extends Migration
             $table->string('kode_klasifikasi_id');
             $table->foreign('kode_klasifikasi_id')->references('kode_klasifikasi')->on('klasifikasis')->onDelete('cascade');
             $table->text('deskripsi');
-            // $table->timestamp('tanggal')->nullable();
+            $table->timestamp('tanggal')->nullable();
             $table->timestamps();
         });
     }

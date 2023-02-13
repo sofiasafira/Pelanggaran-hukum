@@ -63,10 +63,19 @@ body {
   font-weight: var(--bs-body-font-weight);
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
-  text-align: var(--bs-body-text-align);
   background-color: var(--bs-body-bg);
   -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: #317b2f;
+  /* -webkit-tap-highlight-color: #317b2f; */
+
+  
+}
+
+
+
+.main {
+  /* Set the width of the sidebar */
+  margin-top: 60px; /* Add a top margin equal to the height of the navbar */
+  padding: 0px 10px;
 }
 
 hr {
@@ -2226,6 +2235,13 @@ legend + * {
   justify-content: space-between;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  height: 60px;
+  /* background-color: #333; */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
 }
 .navbar > .container,
 .navbar > .container-fluid,
@@ -3824,18 +3840,18 @@ legend + * {
   flex-shrink: 0;
   align-items: center;
   justify-content: flex-end;
-  padding: 0.75rem;
+  padding: 0.25rem;
   border-top: 1px solid #dee2e6;
   border-bottom-right-radius: calc(0.3rem - 1px);
   border-bottom-left-radius: calc(0.3rem - 1px);
 }
 .modal-footer > * {
-  margin: 0.25rem;
+  margin: 0.10rem;
 }
 
 @media (min-width: 576px) {
   .modal-dialog {
-    max-width: 500px;
+    max-width: 200px;
     margin: 1.75rem auto;
   }
 

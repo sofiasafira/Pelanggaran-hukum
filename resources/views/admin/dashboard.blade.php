@@ -33,7 +33,7 @@
 
    
     <div class="container mt-4">
-       <button type="button" class="btn btn-success">Tambah data selembaran</button>
+       <button type="button" class="btn btn-success"><a href="/add_data">Tambah data selembaran</a></button>
     </div>
 
     <div class="container dashboard" style="background-color: red; height: 700px; " >
