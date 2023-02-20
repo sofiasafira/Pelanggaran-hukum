@@ -105,7 +105,6 @@
                   dataType: "json",
                   success:function(data)
                   {
-                    console.log(data)
                     if(data){
                         $('#kode_klasifikasi').empty();
                         $('#kode_klasifikasi').append('<option hidden>Klasifikasi</option>');
