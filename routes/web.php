@@ -35,12 +35,12 @@ Route::get('/add_data', [DataPelanggaranController::class, 'index']);
 
 // get => add_data_peritem/create => create
 Route::get('/add_item_pelanggaran', [DataPelanggaranController::class, 'create']);
-// post => add_data_peritem =>store 
+// post => add_data_peritem =>store
 // get => add_data_peritem/{id}=>show
 // put => add_data_peritem/{id}=>update
 // delete => add_data_peritem/{id}=>delete
-// edit => add_data_peritem/{id}=>edit 
+// edit => add_data_peritem/{id}=>edit
 
 // dpopdown ajax
 Route::get('/add_item_pelanggaran', [DataPelanggaranController::class, 'getDirektoris']);
-Route::get('/add_item_pelanggaran/{kode_direktori_id, kode_jenis_id}', [DataPelanggaranController::class, 'getKlasifikasi']);
+Route::get('/add_item_pelanggaran/{kode_direktori_id}/{kode_jenis_id}', [DataPelanggaranController::class, 'getKlasifikasi']);
