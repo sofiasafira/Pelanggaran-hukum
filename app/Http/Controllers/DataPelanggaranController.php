@@ -21,7 +21,7 @@ class DataPelanggaranController extends Controller
         //table data pelanggaran
         $datas_pelanggaran = DB::table('data_pelanggarans')->get();
 
-        // return view 
+        // return view
         return view('admin.add_data', [
             'title' => 'add_data',
             'datas_pelanggaran' => $datas_pelanggaran
@@ -119,9 +119,9 @@ class DataPelanggaranController extends Controller
 
     public function getKlasifikasi($kode_direktori_id, $kode_jenis_id)
     {
-        $klasifikasi = Klasifikasi::where(['kode_direktori_id', $kode_direktori_id], ['kode_jenis_id', $kode_jenis_id])->get();
-        return response()->json($klasifikasi);
+        $klasifikasi = Klasifikasi::where('kode_direktori_id', $kode_direktori_id)->where('kode_jenis_id', $kode_jenis_id)->get();
+        return  response()->json($klasifikasi);
 
-        @dd($klasifikasi);
+        //  return dd($klasifikasi);
     }
 }
