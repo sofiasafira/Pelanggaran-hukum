@@ -93,13 +93,16 @@
     <script>
       $(document).ready(function() {
         $('#kode_direktori').on('change', function() {
-          var categoryID = $(this).val();
-          console.log(categoryID)
-          if(categoryID) {
+          var direktoriID = $(this).val();
+          console.log(direktoriID)
+          $jenisID = 'acehpu' ; //disini harus jenis ID tapi belom mau
+          console.log(jenisID)
+          if(direktoriID) {
               $.ajax({
-                  url: '/add_item_pelanggaran/'+categoryID,
+                  url: '/add_item_pelanggaran/'+direktoriID+','+jenisID, 
                   type: "GET",
-                  data : {"_token":"{{ csrf_token() }}"},
+                  // data : {"_token":"{{ csrf_token() }}"},
+                  data : {"_token":"{{ csrf_token() }}", "kode_jenis_id":jenisID},
                   dataType: "json",
                   success:function(data)
                   {

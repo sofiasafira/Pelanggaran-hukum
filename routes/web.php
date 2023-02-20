@@ -43,4 +43,4 @@ Route::get('/add_item_pelanggaran', [DataPelanggaranController::class, 'create']
 
 // dpopdown ajax
 Route::get('/add_item_pelanggaran', [DataPelanggaranController::class, 'getDirektoris']);
-Route::get('/add_item_pelanggaran/{kode_direktori_id}', [DataPelanggaranController::class, 'getKlasifikasi']);
+Route::get('/add_item_pelanggaran/{kode_direktori_id, kode_jenis_id}', [DataPelanggaranController::class, 'getKlasifikasi']);

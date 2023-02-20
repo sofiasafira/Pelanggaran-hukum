@@ -109,7 +109,7 @@ class DataPelanggaranController extends Controller
     public function getDirektoris()
     {
         $direktoris = Direktori::get();
-        $klasifikasi = Klasifikasi::get();
+        $klasifikasi = Klasifikasi::all();
         return view('admin.add_item_pelanggaran', [
             'title' => "add-item-pelanggaran",
             'direktoris' => $direktoris,
@@ -117,9 +117,11 @@ class DataPelanggaranController extends Controller
         ]);
     }
 
-    public function getKlasifikasi($kode_direktori_id)
+    public function getKlasifikasi($kode_direktori_id, $kode_jenis_id)
     {
-        $klasifikasi = Klasifikasi::where('kode_direktori_id', $kode_direktori_id)->get();
+        $klasifikasi = Klasifikasi::where(['kode_direktori_id', $kode_direktori_id], ['kode_jenis_id', $kode_jenis_id])->get();
         return response()->json($klasifikasi);
+
+        @dd($klasifikasi);
     }
 }
