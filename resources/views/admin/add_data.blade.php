@@ -37,7 +37,7 @@
 
    
     <div class="container mt-4">
-       <button type="button" class="btn btn-success"><a href="add_item_pelanggaran">Tambah data selembaran</a></button>
+       <button type="button" class="btn btn-success  ms-auto"><a href="add_item_pelanggaran" style="text-decoration: none; color: white">Tambah Data</a></button>
     </div>
 
     <div class="container mt-4">
@@ -49,13 +49,20 @@
           <th>Klasifikasi</th>
           <th>Aksi</th>
         </tr>
+        @foreach ($datas_pelanggaran as $dp)
         <tr>
-          <td>Alfreds Futterkiste</td>
-          <td>Maria Anders</td>
-          <td>Germany</td>
-          <td>Germany</td>
-          <td>Germany</td>
+          <td>{{ $dp-> kode_pelanggaran }}</td>
+          <td>{{ $dp->user_id }}</td>
+          <td>{{ $dp->kode_direktori_id }}</td>
+          <td>{{ $dp->kode_klasifikasi_id }}</td>
+          <td>
+            <button type="button" class="btn btn-primary"><a href="/add_data">Edit</a></button>
+            |
+            <button type="button" class="btn btn-danger"><a href="/add_data">Hapus</a></button>
+            
+          </td>
         </tr>
+        @endforeach
       </table>
 
     </div>
