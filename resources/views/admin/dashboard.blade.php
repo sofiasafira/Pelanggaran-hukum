@@ -33,7 +33,7 @@
 
    
     <div class="container mt-4">
-       <button type="button" class="btn btn-success"><a href="/add_data" style="text-decoration: none; color: white">Tambah data selembaran</a></button>
+       <button type="button" class="btn btn-success"><a href="{{ route('admin.index') }}" style="text-decoration: none; color: white">Tambah data selembaran</a></button>
     </div>
 
     <div class="container dashboard" style="height: 700px; " >

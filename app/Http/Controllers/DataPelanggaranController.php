@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DataPelanggaran;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreDataPelanggaranRequest;
 use App\Http\Requests\UpdateDataPelanggaranRequest;
 use App\Models\Direktori;
@@ -21,7 +22,7 @@ class DataPelanggaranController extends Controller
         //table data pelanggaran
         $datas_pelanggaran = DB::table('data_pelanggarans')->get();
 
-        // return view
+        // return view 
         return view('admin.add_data', [
             'title' => 'add_data',
             'datas_pelanggaran' => $datas_pelanggaran
@@ -37,9 +38,11 @@ class DataPelanggaranController extends Controller
     public function create()
     {
         //
+        $direktoris = Direktori::get();
         $model = new  DataPelanggaran;
         return view('admin.add_item_pelanggaran', compact('model'), [
-            "title" => "add_item_pelanggaran"
+            "title" => "add_item_pelanggaran",
+            'direktoris' => $direktoris
         ]);
     }
 
@@ -49,13 +52,21 @@ class DataPelanggaranController extends Controller
      * @param  \App\Http\Requests\StoreDataPelanggaranRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreDataPelanggaranRequest $request)
+    public function store(Request $request)
     {
-        //
-        // $model = new DataPelanggaran;
-        // $model->kode_pelanggaran = $request->kode_pelanggaran;
-        // $model->tanggal = $request->tanggal;
-        // $model->kode_pelanggaran = $request->kode_pelanggaran;
+
+        // DataPelanggaran::create($request->all());
+
+        DB::table('data_pelanggarans')->insert([
+            'kode_pelanggaran' => $request->kode_pelanggaran,
+            'tanggal' => $request->tanggal,
+            'kode_direktori_id' => $request->kode_direktori,
+            'kode_klasifikasi_id' => $request->kode_klasifikasi,
+            'user_id' => $request->user_id,
+            'deskripsi' => $request->deskripsi
+        ]);
+
+        return redirect('admin');
     }
 
     /**
@@ -98,9 +109,17 @@ class DataPelanggaranController extends Controller
      * @param  \App\Models\DataPelanggaran  $dataPelanggaran
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DataPelanggaran $dataPelanggaran)
+    public function destroy(DataPelanggaran $kode_pelanggaran)
     {
         //
+        DataPelanggaran::destroy($kode_pelanggaran);
+        // $dataPelanggaran = DataPelanggaran::find($kode_pelanggaran);
+        // $dataPelanggaran->delete();
+        // User::destroy($id);
+        // $dataPelanggaran = DataPelanggaran::destroy($kode_pelanggaran);
+        // $dataPelanggaran->delete();
+
+        return redirect('admin');
     }
 
 
@@ -109,19 +128,19 @@ class DataPelanggaranController extends Controller
     public function getDirektoris()
     {
         $direktoris = Direktori::get();
-        $klasifikasi = Klasifikasi::all();
+        $klasifikasi = Klasifikasi::get();
         return view('admin.add_item_pelanggaran', [
             'title' => "add-item-pelanggaran",
             'direktoris' => $direktoris,
-            'klasifikasi' => $klasifikasi
+            'klasifikasi' => $klasifikasi,
         ]);
     }
 
     public function getKlasifikasi($kode_direktori_id, $kode_jenis_id)
     {
         $klasifikasi = Klasifikasi::where('kode_direktori_id', $kode_direktori_id)->where('kode_jenis_id', $kode_jenis_id)->get();
-        return  response()->json($klasifikasi);
+        return response()->json($klasifikasi);
 
-        //  return dd($klasifikasi);
+        // @dd($klasifikasi);
     }
 }

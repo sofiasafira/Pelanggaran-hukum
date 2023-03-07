@@ -14,15 +14,15 @@ class CreateDataPelanggaransTable extends Migration
     public function up()
     {
         Schema::create('data_pelanggarans', function (Blueprint $table) {
-            $table->string('kode_pelanggaran')->primary();
+            $table->id('kode_pelanggaran');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('kode_direktori_id');
             $table->foreign('kode_direktori_id')->references('kode_direktori')->on('direktoris')->onDelete('cascade');
             $table->string('kode_klasifikasi_id');
             $table->foreign('kode_klasifikasi_id')->references('kode_klasifikasi')->on('klasifikasis')->onDelete('cascade');
-            $table->text('deskripsi');
-            // $table->timestamp('tanggal')->nullable();
+            $table->text('deskripsi')->nullable();
+            $table->date('tanggal')->nullable();
             $table->timestamps();
         });
     }

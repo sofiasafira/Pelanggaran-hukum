@@ -37,7 +37,7 @@
 
    
     <div class="container mt-4">
-       <button type="button" class="btn btn-success  ms-auto"><a href="add_item_pelanggaran" style="text-decoration: none; color: white">Tambah Data</a></button>
+       <button type="button" class="btn btn-success  ms-auto"><a href="{{ route('admin.create') }}" style="text-decoration: none; color: white">Tambah Data</a></button>
     </div>
 
     <div class="container mt-4">
@@ -47,21 +47,27 @@
           <th>Tanggal Putusan</th>
           <th>Direktori</th>
           <th>Klasifikasi</th>
+          <th>Deskripsi</th>
           <th>Aksi</th>
         </tr>
         @foreach ($datas_pelanggaran as $dp)
-        <tr>
-          <td>{{ $dp-> kode_pelanggaran }}</td>
-          <td>{{ $dp->user_id }}</td>
-          <td>{{ $dp->kode_direktori_id }}</td>
-          <td>{{ $dp->kode_klasifikasi_id }}</td>
-          <td>
-            <button type="button" class="btn btn-primary"><a href="/add_data">Edit</a></button>
-            |
-            <button type="button" class="btn btn-danger"><a href="/add_data">Hapus</a></button>
-            
-          </td>
-        </tr>
+          <tr>
+            <td>{{ $dp->kode_pelanggaran }}</td>
+            <td>{{ $dp->tanggal }}</td>
+            <td>{{ $dp->kode_direktori_id }}</td>
+            <td>{{ $dp->kode_klasifikasi_id }}</td>
+            <td>{{ $dp->deskripsi }}</td>
+            <td>
+              <button type="button" class="btn btn-primary"><a href="{{ route('admin.show' ,$dp->kode_pelanggaran) }}" style="text-decoration: none; color:white">Edit</a></button>
+              
+              <form action="{{ route('admin.destroy', $dp->kode_pelanggaran ) }}" method="" style="display: inline-block">
+                @csrfl
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger">Hapus</button>
+              </form>
+
+            </td>
+          </tr>
         @endforeach
       </table>
 

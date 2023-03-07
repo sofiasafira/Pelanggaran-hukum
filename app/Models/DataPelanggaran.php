@@ -11,7 +11,10 @@ class DataPelanggaran extends Model
 
     protected $guarded = [];
 
-    // protected $primaryKey = 'kode_pelanggaran';
+    protected $primaryKey = 'kode_pelanggaran';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
 
     public function user()
     {

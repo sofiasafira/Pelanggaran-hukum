@@ -26,20 +26,9 @@ Route::post('/login', [UserController::class, 'authenticate']);
 
 Route::get('/dashboard', [UserController::class, 'dashboard']);
 
-Route::get('/data_pelanggaran', [UserController::class, 'data_pelanggaran']);
-// Route::get('/add_data', [UserController::class, 'add_data']);
 
-
-// get => add_data => index
-Route::get('/add_data', [DataPelanggaranController::class, 'index']);
-
-// get => add_data_peritem/create => create
-Route::get('/add_item_pelanggaran', [DataPelanggaranController::class, 'create']);
-// post => add_data_peritem =>store
-// get => add_data_peritem/{id}=>show
-// put => add_data_peritem/{id}=>update
-// delete => add_data_peritem/{id}=>delete
-// edit => add_data_peritem/{id}=>edit
+// crud
+Route::resource('admin', DataPelanggaranController::class);
 
 // dpopdown ajax
 Route::get('/add_item_pelanggaran', [DataPelanggaranController::class, 'getDirektoris']);
