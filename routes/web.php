@@ -20,8 +20,6 @@ Route::get('/dashboardumum', "App\Http\Controllers\DashboardController@index");
 // bagian admin
 Route::get('/landing-page', [UserController::class, 'index']); 
 
-
-
 Route::get('/login', [UserController::class, 'login']);
 Route::post('/login', [UserController::class, 'authenticate']);
 
