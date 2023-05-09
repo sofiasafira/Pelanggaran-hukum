@@ -11,7 +11,10 @@ class DataPelanggaran extends Model
 
     protected $guarded = [];
 
-    // protected $primaryKey = 'kode_pelanggaran';
+    protected $primaryKey = 'kode_pelanggaran';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
 
     public function user()
     {
@@ -26,5 +29,10 @@ class DataPelanggaran extends Model
     public function Klasifikasi()
     {
         return $this->belongsTo(Klasifikasi::class);
+    }
+
+    public function Desa()
+    {
+        return $this->belongsTo(Desa::class);
     }
 }

@@ -1,0 +1,476 @@
+
+:root {
+
+    --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --bs-body-font-family: Nunito, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    --bs-body-font-size: 1rem;
+    --bs-body-font-weight: 400;
+    --bs-body-line-height: 1.5;
+    --bs-body-color: #317b2f;
+    --bs-body-bg: #317b2f;
+  }
+  /* Style untuk map */
+  #map {
+      height: 550px;
+  }
+
+
+  /* Menambahkan gaya pada garis pemisah */
+.leaflet-control-layers-separator {
+  margin: 5px 0;
+  border-top: 1px solid #ccc;
+}
+
+.legend {
+  line-height: 18px;
+  color: #555;
+  background-color: #ccc;
+}
+.legend i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+
+  /* Menambahkan gaya pada garis pemisah */
+.leaflet-control-layers-separator {
+  margin: 5px 0;
+  border-top: 1px solid #ccc;
+}
+  
+  body {
+    background-image: linear-gradient(to bottom, #317b2f, black);
+    font-family: var(--bs-body-font-family);
+    
+  }
+  
+  .bullet-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .bullet-item {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .red {
+    background-color: #0c4cac;
+    color: black;
+  }
+  
+  .green {
+    background-color: #3cb649;
+    color: black;
+  }
+  
+  .blue {
+    background-color:  #fb7648;
+    color: black;
+  }
+  
+  .yellow {
+    background-color:#e2fa62;
+    color: black;
+  }
+  
+  .form-check-label {
+    color: #ffffff; /* warna putih */
+  }
+  
+  
+  .total-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+  }
+  
+  
+  .form-check {
+      margin-right: 20px;
+  }
+  
+  
+  .total-pelanggaran {
+      background-color: #64a19d;;
+      color: white;
+      padding: 10px;
+      border-radius: 15px;
+  }
+  
+  .total-pelanggaran:hover {
+    background-color: #9d8e1e;
+    cursor: pointer;
+  }
+  
+  
+  .judul-grafik {
+    background-color: #198754;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .judul-grafik:hover {
+    background-color: #9d8e1e;
+    cursor: pointer;
+  }
+  
+  
+  
+  
+  /* Style untuk navbar */
+  nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 3px;
+      background-color: #317b2f;
+      border-radius: 10px;
+    }
+    
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+    }
+  
+    .navbar-container {
+      border: 1px solid black;
+    }
+    
+    .navbar-logo img {
+      height: 50px;
+      margin-right: 10px;
+    }
+    
+    .navbar-items ul {
+      list-style-type: none;
+      margin-right: 20px;
+      margin-left: 20px;
+      padding: 0;
+    }
+    
+    .navbar-items li {
+      margin-left: 20px;
+    }
+    
+    .navbar-items a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+  
+    
+   .navbar-items ul li {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    
+    .navbar-items ul li:last-child {
+      margin-right: 0;
+    }
+    
+    .navbar-items ul li a {
+      display: block;
+      float: left; /* mengatur float ke kiri */
+    }
+    
+    .navbar-items a:hover {
+      color: #000;
+      transition: all 0.3s ease;
+    }
+  
+  .main {
+      margin: 10px;
+      padding: 5px;
+      border-radius: 10px;
+    }
+  
+  .main img {
+      transition: transform 0.5s ease;
+  }
+  
+  .main img:hover {
+      transform: scale(1.1);
+      position: relative;
+      z-index: 1;
+  }
+  
+  /* Style untuk content */
+  .content {
+      padding: 10px;
+  }
+  
+  #informasi {
+    display: none;
+    text-align: left;
+  }
+  
+  .drop-informasi {
+    color: #000000;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+  }
+  .judul-drop {
+    background-color: #198754;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    justify-content: center;
+    text-align: center;
+    display: inline-block;
+    min-width: fit-content; 
+    margin-top: 8px; 
+    margin-bottom: 20px; 
+    align-items: center;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .judul-drop:hover {
+    background-color: #9d8e1e;
+    cursor: pointer;
+  }
+  
+  
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  tr:hover {
+    background-color: #cce5ff;
+  }
+  
+  
+  
+  /*untuk tootip*/
+  
+  
+  
+  .leaflet-tooltip {
+    background-color: transparent;
+    box-shadow: none;
+  }
+  
+  .custom-tooltip.leaflet-tooltip {
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+  }
+  
+  .tooltip-middle {
+    margin-left: -50%;
+    margin-top: -50%;
+  }
+  
+  .custom-tooltip {
+    width: auto;
+    max-width: 200px;
+    white-space: nowrap;
+    /* overflow: hidden; */
+    text-overflow: ellipsis;
+  }
+  
+  .popup-content {
+    display: flex;
+    align-items: center;
+    }
+    
+    .popup-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 10px;
+    border-radius: 8px;
+    }
+        
+    .popup-direction {
+      display: flex;
+      align-items: center;
+    }
+    
+    .popup-direction-logo {
+      margin-right: 0.5em; /* Sesuaikan nilai ini sesuai dengan preferensi Anda */
+      width: 30px;
+      height: 30px;
+    }
+    
+  
+    .popup-direction-button {
+      display: inline-block;
+      margin: 0;
+      margin-left: 3px;
+      font-size: 8px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #fff;
+      background-color: #5ab38b;
+      padding: 0.5em 1em;
+      border-radius: 10px;
+      text-decoration: none;
+  }
+  
+    
+  .popup-info {
+    margin-top: 1px;
+  }
+  
+  .popup-info h3 {
+    margin-bottom: 1px;
+    line-height: 1;
+  }
+  
+  .popup-info p {
+    margin: 0;
+    line-height: 1;
+  }
+  
+  .popup-info p:last-child {
+    margin-bottom: 0;
+    font-style: italic;
+  }
+  
+  .popup-info a {
+    display: block;
+  }
+  
+  .popup-kunjungi a {
+    font-style: italic;
+  }
+  
+  
+  
+  
+  
+  /* Style untuk footer */
+  .footer {
+      background-color: #f2f2f2;
+      padding: 10px;
+      text-align: center;
+  }
+  
+  
+  /*INI UNTUK HALAMAN TENTANG*/
+  
+  
+  .gambar-deskripsi {
+    display: flex;
+  }
+  
+  .gambar-deskripsi img {
+    float: left;
+    margin-right: 20px;
+    max-width: 50%;
+    border-radius: 10px;
+  }
+  
+  .gambar-deskripsi p {
+    margin-left: 20px;
+    text-align: justify;
+    color: #fdfdfd;
+  }
+  
+  
+  
+  
+  .toggle {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .toggle2 {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .arrow {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    font-size: 20px;
+    transform: translateY(-50%) rotate(90deg);
+    transition: transform 0.3s ease;
+  }
+  .arrow2 {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    font-size: 20px;
+    transform: translateY(-50%) rotate(90deg);
+    transition: transform 0.3s ease;
+  }
+  
+  
+  .arrow.active {
+    transform: rotate(-90deg);
+  }
+  
+  
+  .arrow.active2 {
+    transform: rotate(-90deg);
+  }
+  
+  .content-hide {
+    display: none;
+    margin-top: 5px;
+  }
+  
+  .content-hide2 {
+    display: none;
+    margin-top: 5px;
+  }
+  
+  .content-hide.active {
+    display: block;
+  }
+  
+  .content-hide.active2 {
+    display: block;
+  }
+  
+  .image-description {
+    display: flex;
+    align-items: center;
+  }
+  
+  .image {
+    margin-right: 20px;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  .image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .description h2 {
+    color: white;
+  }
+  
+  .description p {
+    text-align: justify;
+    color: white;
+  }
+  

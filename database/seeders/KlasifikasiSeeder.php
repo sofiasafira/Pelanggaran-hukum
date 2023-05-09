@@ -595,5 +595,19 @@ class KlasifikasiSeeder extends Seeder
             'kode_direktori_id' => 'dir05',
             'kode_jenis_id' => 'acehptun',
         ]);
+
+        Klasifikasi::create([
+            'kode_klasifikasi' => 'phi',
+            'nama_klasifikasi' => 'PHI',
+            'kode_direktori_id' => 'dir06',
+            'kode_jenis_id' => 'acehpu',
+        ]);
+
+        Klasifikasi::create([
+            'kode_klasifikasi' => 'parpol',
+            'nama_klasifikasi' => 'Parpol',
+            'kode_direktori_id' => 'dir06',
+            'kode_jenis_id' => 'acehpu',
+        ]);
     }
 }

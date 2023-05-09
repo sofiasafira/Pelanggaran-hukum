@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>PelHum | {{ $title }}</title>
+        <title>SIJULANK | {{ $title }}</title>
         <link rel="icon" type="image/x-icon" href="assets-admin/image/simbol.png" />
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -19,37 +19,34 @@
         <!-- Include Leaflet CSS file in the head section -->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin=""/>
 
-         <!-- Make sure you put this AFTER Leaflet's CSS -->
-        <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js" integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="crossorigin=""></script>
-
-        <style>
-            #map { height: 180px; }
-        </style>
     </head>
     
     <body id="page-top">
         <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: #198754" id="mainNav">
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-            </div>
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top rounded" id="mainNav">
             <div class="container px-4 px-lg-5">
-            <img src="assets-admin\image\simbol.png" alt="..." width="50px" style="margin-right: 20px"><a class="navbar-brand" href="#page-top">Informasi Sebaran Pelanggaran Hukum</a>
+                <div class="d-flex align-items-center">
+                <img src="assets-admin\image\simbol.png" alt="..." width="50px" style="margin-right: 20px">
+                <a class="navbar-brand mr-auto" href="#">Informasi Sebaran Pelanggaran Hukum</a>
+                </div>
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                    Menu
-                    <i class="fas fa-bars"></i>
+                Menu
+                <i class="fas fa-bars"></i>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/login">Login PN</a>
-                        </li>
-                        <li class="nav-item"> 
-                            <a class="nav-link" href="/about">About</a>
-                        </li>
-                    </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                    <a class="nav-link" href="/login">Login Pengadilan</a>
+                    </li>
+                    <li class="nav-item"> 
+                    <a class="nav-link" href="/tentang">Tentang</a>
+                    </li>
+                </ul>
                 </div>
             </div>
         </nav>
+
+
 
         <div> 
             @yield('container')
@@ -104,4 +101,5 @@
         <script src="assets-home/js/scripts.js"></script>
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     </body>
+    
 </html>

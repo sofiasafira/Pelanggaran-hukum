@@ -40,8 +40,9 @@ class User extends Authenticatable
 
     public function kabupaten()
     {
-        return $this->belongsTo(Kabupaten::class);
+        return $this->belongsTo(Kabupaten::class, 'kode_kab_id');
     }
+    
 
     public function jenis_pengadilan()
     {

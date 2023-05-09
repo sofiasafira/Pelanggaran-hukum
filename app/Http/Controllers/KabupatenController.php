@@ -15,7 +15,12 @@ class KabupatenController extends Controller
      */
     public function index()
     {
-        //
+
+        $user = Auth::user();
+        $kode_kab_id = $user->kode_kab_id;
+
+        return view('admin.profile')->with('kode_kab_id', $kode_kab_id);
+
     }
 
     /**

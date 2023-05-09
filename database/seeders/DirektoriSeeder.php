@@ -32,17 +32,17 @@ class DirektoriSeeder extends Seeder
 
         Direktori::create([
             'kode_direktori' => 'dir04',
-            'nama_direktori' => 'Perdata Khusus',
-        ]);
-
-        Direktori::create([
-            'kode_direktori' => 'dir05',
             'nama_direktori' => 'Perdata Agama',
         ]);
 
         Direktori::create([
+            'kode_direktori' => 'dir05',
+            'nama_direktori' => 'TUN',
+        ]);
+
+        Direktori::create([
             'kode_direktori' => 'dir06',
-            'nama_direktori' => 'TUN ',
+            'nama_direktori' => 'Perdata Khusus',
         ]);
     }
 }

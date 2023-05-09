@@ -10,6 +10,8 @@ class Klasifikasi extends Model
     use HasFactory;
 
     protected $guarded = [];
+    // protected $primaryKey = 'kode_klasifikasi';
+
 
     // protected $primaryKey = 'kode_klasifikasi';
 

@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             KabupatenSeeder::class,
             KlasifikasiSeeder::class,
             UserSeeder::class,
+            KecamatanSeeder::class,
+            DesaSeeder::class,
         ]);
     }
 }

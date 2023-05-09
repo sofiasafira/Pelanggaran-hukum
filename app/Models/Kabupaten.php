@@ -11,10 +11,12 @@ class Kabupaten extends Model
 
     protected $guarded = [];
 
-    // protected $primaryKey = 'kode_kab';
+    protected $primaryKey = 'kode_kab';
 
-    public function user()
+    public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'kode_kab');
     }
+    
+
 }
