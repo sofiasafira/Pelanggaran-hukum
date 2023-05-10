@@ -61,6 +61,9 @@ Route::put('/klasifikasi/{kode_klasifikasi}/update', [KlasifikasiController::cla
 
 // crud data kecamatan
 Route::resource('kecamatan', KecamatanController::class);
+Route::get('/editkecamatan/{kode_kec}/edit', [KecamatanController::class, "edit"]);
+Route::put('/editkecamatan/{kode_kec}', [KecamatanController::class, "update"]);
+
 
 // crud data desa
 Route::resource('desa', DesaController::class);

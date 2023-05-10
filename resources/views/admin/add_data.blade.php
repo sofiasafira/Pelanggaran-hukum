@@ -95,7 +95,6 @@
 </div>
 </div>
 @include('sweetalert::alert')
-
 <script>
   feather.replace();
 </script>
@@ -170,10 +169,26 @@ $('#filter_kolom_5').change(function() {
     });
   });
 });
-
-
-
 });
+
+</script>
+
+<script>
+    function hapusData() {
+        Swal.fire({
+            title: 'Apakah Anda yakin ingin menghapus data ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus data!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Kirim permintaan hapus
+                window.location.href = "{{ route('admin.delete', $dp->kode_pelanggaran) }}";
+            }
+        })
+    }
 </script>
 
 

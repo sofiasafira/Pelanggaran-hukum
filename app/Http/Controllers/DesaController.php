@@ -82,6 +82,7 @@ class DesaController extends Controller
         $desa->nama_des = $request->nama_desa;
         $desa->geojson_des = $request->geojson_des;
         $desa->save();
+        // dd($desa);
     
         return redirect()->back()->withSuccess('desa berhasil ditambahkan');
     }
@@ -93,8 +94,10 @@ class DesaController extends Controller
         ->join('kecamatans', 'desas.kode_kec_id', '=', 'kecamatans.kode_kec')
         ->join('kabupatens', 'kecamatans.kode_kab_id', '=', 'kabupatens.kode_kab')
         ->where('kabupatens.kode_kab', '=', auth()->user()->kode_kab_id)
+        ->where('desas.kode_des', '=', $kode_des)
         ->select('desas.*', 'kecamatans.nama_kec')
         ->get();
+    
     
         $kecamatans =  DB::table('kecamatans')
         ->join('kabupatens', 'kecamatans.kode_kab_id', '=', 'kabupatens.kode_kab')
@@ -111,7 +114,7 @@ class DesaController extends Controller
     public function update(Request $request, $kode_des)
     {
         $desa = Desa::findOrFail($kode_des);
-        dd($desa); // tambahkan ini
+        // dd($desa); // tambahkan ini
         $desa->kode_des = $request->input('kode_desa');
         $desa->kode_kec_id = $request->input('kode_kecamatan');
         $desa->nama_des = $request->input('nama_desa');

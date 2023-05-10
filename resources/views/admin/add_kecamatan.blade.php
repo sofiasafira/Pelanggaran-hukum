@@ -66,7 +66,7 @@
         <td>{{ $dk->nama_kab}}</td>
         <td>{{ $dk->nama_kec}}</td>
         <td>
-          <a class="icon"><i data-feather="edit" class="text-success"></i></a>
+        <a class="icon mr-2" href="/editkecamatan/{{$dk->kode_kec}}/edit"><i data-feather="edit" class="text-success"></i></a>
         </td>
       </tr>
     @endif

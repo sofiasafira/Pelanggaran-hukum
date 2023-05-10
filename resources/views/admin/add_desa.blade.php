@@ -25,7 +25,7 @@
           <option selected disabled >Kecamatan</option>
           @foreach ($kecamatans as $kec)
           @if ($kec->kode_kab_id == auth()->user()->kode_kab_id)
-            <option value="{{ $kec->nama_kec }}">{{ $kec->nama_kec }}</option>
+            <option value="{{ $kec->kode_kec }}">{{ $kec->nama_kec }}</option>
           @endif
           @endforeach
         </select>

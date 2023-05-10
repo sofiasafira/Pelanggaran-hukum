@@ -108,7 +108,7 @@ class DataPelanggaranController extends Controller
     public function delete($kode_pelanggaran)
     {
         // Retrieve the data pelanggaran that matches the provided kode_pelanggaran
-        $data_pelanggaran = DataPelanggaran::findOrFail($kode_pelanggaran);
+        $data_pelanggaran = DataPelanggaran::find($kode_pelanggaran);
 
         // Delete the data pelanggaran from the database
         $data_pelanggaran->delete();

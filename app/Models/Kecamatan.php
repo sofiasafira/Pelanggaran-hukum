@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Kecamatan extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'kode_kec';
 
     protected $fillable = [
         'geojson_kec'// tambahkan kolom ini ke daftar fillable
@@ -19,9 +20,9 @@ class Kecamatan extends Model
         return $this->hasMany(Desa::class);
     }
 
-    public function kabupaten()
+    public function kabupatens()
     {
-        return $this->belongsTo(Kabupaten::class);
+        return $this->belongsTo(Kabupaten::class, 'kode_kab_id', 'kode_kab');
     }
 
     public function getGeojsonKecAttribute()
