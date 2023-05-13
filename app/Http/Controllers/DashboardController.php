@@ -18,6 +18,7 @@ class DashboardController extends Controller
         $nama_kabupaten = DB::table("kabupatens")->get();
         $klasifikasis = DB::table("klasifikasis")->get();
         $titikdir = DB::table("data_pelanggarans")->get();
+        // dd($titikdir);
         $titik = DB::table("users")->get();
         $desas = Desa::get();
         // dd($geojson_desa->keys(), $geojson_desa);

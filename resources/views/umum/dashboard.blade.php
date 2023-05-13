@@ -18,10 +18,8 @@
     <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-
-    
+   
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-
 </head>
 <body>
 	<!-- Navbar -->
@@ -38,8 +36,6 @@
         </ul>
     </div>
     </nav>
-
-
 	<!-- Content -->
  	<div class="content">
         <div class="total-container">
@@ -110,7 +106,6 @@
     <!-- Link Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Link Core theme JS-->
-    <script src="assets-home/js/scripts.js"></script>
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-json/2.6.0/jquery.json.min.js"
         integrity="sha512-QE2PMnVCunVgNeqNsmX6XX8mhHW+OnEhUhAWxlZT0o6GFBJfGRCfJ/Ut3HGnVKAxt8cArm7sEqhq2QdSF0R7VQ=="
@@ -118,9 +113,10 @@
     <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"
         integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous" refer></script>
-    	<!-- Load Leaflet.Legend CSS and JavaScript -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Leaflet/Leaflet.legend/dist/L.Control.Legend.css" />
-	<script src="https://cdn.jsdelivr.net/gh/Leaflet/Leaflet.legend/dist/L.Control.Legend.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="assets-umum/js/jquery.json.min.js"></script>
+
 
     <!-- Diagram Batang -->
     <script>
@@ -240,43 +236,6 @@
     </script>
 
     <script>
-
-        // // definisikan legenda
-        // var legend = L.control({ position: 'bottomright' });
-        // legend.onAdd = function(map) {
-        // var div = L.DomUtil.create('div', 'info legend'),
-        //     grades = [1, 2, 10, 20, 50, 100], // nilai yang akan dibandingkan
-        //     labels = [],
-        //     from, to;
-
-        // // tambahkan label pada setiap kondisi
-        // for (var i = 0; i < grades.length; i++) {
-        //     from = grades[i];
-        //     to = grades[i + 1] - 1;
-
-        //     labels.push(
-        //     '<i style="background:' + getColor(from + 1) + '"></i> ' +
-        //     from + (to ? '&ndash;' + to : '+'));
-        // }
-
-        // // tambahkan legenda ke dalam div
-        // div.innerHTML = labels.join('<br>');
-
-        // return div;
-        // };
-
-        // // tambahkan legenda ke dalam peta
-        // legend.addTo(map);
-
-        // // fungsi untuk menentukan warna berdasarkan nilai
-        // function getColor(d) {
-        // return d > 100 ? '#FF0000' :
-        //     d > 50 ? '#FFA500' :
-        //     d > 20 ? '#FFFF00' :
-        //     d > 10 ? '#008000' :
-        //     d > 2 ? '#0000FF' :
-        //     '#FFFFFF';
-        // }
         var peta1 = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
 			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
@@ -358,119 +317,6 @@
             'Pengadilan Tata Usaha Negara': pengadilanAcehptun,
             'Pengadilan Militer': pengadilanDefault
         }).addTo(map);
-
-        // create an object to store the layer groups and their labels
-
-        // Menambahkan layer direktori
-        const dirPidanaKhusus = L.layerGroup();
-        const dirPidanaUmum = L.layerGroup();
-        const dirPerdata = L.layerGroup();
-        const dirPerdataAgama = L.layerGroup();
-        const dirTUN = L.layerGroup();
-        const dirPerdataKhusus = L.layerGroup();
-
-        var layerGroups = {
-        'Dir. Pidana Khusus': dirPidanaKhusus,
-        'Dir. Pidana Umum': dirPidanaUmum,
-        'Dir. Perdata': dirPerdata,
-        'Dir. Perdata Agama': dirPerdataAgama,
-        'Dir. TUN': dirTUN,
-        'Dir. Perdata Khusus': dirPerdataKhusus
-        };
-
-        var direktori = {!! json_encode($titikdir) !!};
-
-        // map.on('zoomend', function() {
-        //     var zoom = map.getZoom();
-
-        //     direktori.forEach(function(titikdir) {
-        //         var markerColor = '';
-        //         var radius = zoom < 10 ? 4 : zoom < 13 ? 6 : 8; //atur ukuran radius point sesuai zoom
-
-        //         if (titikdir.kode_direktori_id === "dir01") {
-        //             markerColor = 'red';
-        //             dirPidanaKhusus.addLayer(L.circleMarker([titikdir.latitude, titikdir.longitude], {radius: radius, fillColor: markerColor, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.8}));
-        //         } else if (titikdir.kode_direktori_id === "dir02") {
-        //             markerColor = 'orange';
-        //             dirPidanaUmum.addLayer(L.circleMarker([titikdir.latitude, titikdir.longitude], {radius: radius, fillColor: markerColor, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.8}));
-        //         } else if (titikdir.kode_direktori_id === "dir03") {
-        //             markerColor = 'yellow';
-        //             dirPerdata.addLayer(L.circleMarker([titikdir.latitude, titikdir.longitude], {radius: radius, fillColor: markerColor, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.8}));
-        //         } else if (titikdir.kode_direktori_id === "dir04") {
-        //             markerColor = 'green';
-        //             dirPerdataAgama.addLayer(L.circleMarker([titikdir.latitude, titikdir.longitude], {radius: radius, fillColor: markerColor, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.8}));
-        //         } else if (titikdir.kode_direktori_id === "dir05") {
-        //             markerColor = 'blue';
-        //             dirTUN.addLayer(L.circleMarker([titikdir.latitude, titikdir.longitude], {radius: radius, fillColor: markerColor, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.8}));
-        //         } else {
-        //             markerColor = 'purple';
-        //             dirPerdataKhusus.addLayer(L.circleMarker([titikdir.latitude, titikdir.longitude], {radius: radius, fillColor: markerColor, color: '#000', weight: 1, opacity: 1, fillOpacity: 0.8}));
-        //         }
-        //     });
-        // });
-
-        // map.on('zoomend', function() {
-        //     var zoom = map.getZoom();
-
-        //     direktori.forEach(function(titikdir) {
-        //         var radius = zoom < 10 ? 4 : zoom < 13 ? 6 : 8; //atur ukuran radius point sesuai zoom
-
-        //         if (titikdir.kode_direktori_id === "dir01") {
-        //             dirPidanaKhusus.addLayer(L.marker([titikdir.latitude, titikdir.longitude]));
-        //         } else if (titikdir.kode_direktori_id === "dir02") {
-        //             dirPidanaUmum.addLayer(L.marker([titikdir.latitude, titikdir.longitude]));
-        //         } else if (titikdir.kode_direktori_id === "dir03") {
-        //             dirPerdata.addLayer(L.marker([titikdir.latitude, titikdir.longitude]));
-        //         } else if (titikdir.kode_direktori_id === "dir04") {
-        //             dirPerdataAgama.addLayer(L.marker([titikdir.latitude, titikdir.longitude]));
-        //         } else if (titikdir.kode_direktori_id === "dir05") {
-        //             dirTUN.addLayer(L.marker([titikdir.latitude, titikdir.longitude]));
-        //         } else {
-        //             dirPerdataKhusus.addLayer(L.marker([titikdir.latitude, titikdir.longitude]));
-        //         }
-        //     });
-        // });
-
-
-        dirPidanaKhusus.addTo(map);
-        dirPidanaUmum.addTo(map);
-        dirPerdata.addTo(map);
-        dirPerdataAgama.addTo(map);
-        dirTUN.addTo(map);
-        dirPerdataKhusus.addTo(map);
-
-
-        // create the legend control
-        var legend = L.control({position: 'bottomright'});
-
-        // add the checkbox list to the legend
-        legend.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'info legend');
-        for (var groupName in layerGroups) {
-            div.innerHTML +=
-            '<input type="checkbox" id="' + groupName + '" name="' + groupName + '" checked>' +
-            '<label for="' + groupName + '">' + groupName + '</label><br>';
-        }
-        
-        // add event listener to each checkbox
-        div.addEventListener('change', function(e) {
-            var layerName = e.target.name;
-            var layer = layerGroups[layerName];
-            
-            if (e.target.checked) {
-            layer.addTo(map);
-            } else {
-            map.removeLayer(layer);
-            }
-        });
-        
-        return div;
-        };
-
-
-        // add the legend to the map
-        legend.addTo(map);
-
 
 
         const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -1328,6 +1174,20 @@
             }
         });
     </script>
+    <script>
+        // @foreach($titikdir as $titikpel)
+        //     var mark;
+        //     mark = L.marker([{{$titikpel->latitude}}, {{$titikpel->longitude}}]).addTo(map);         
+        // @endforeach
 
+        @foreach($titikdir as $titikpel)
+
+        let titikPelLat = {!! json_encode($titikpel->latitude) !!}
+
+        let titikPelLot = {!! json_encode($titikpel->longitude) !!}
+
+        mark = L.marker([titikPelLat, titikPelLon]).addTo(map)
+        @endforeach
+    </script>
 </body>
 </html>

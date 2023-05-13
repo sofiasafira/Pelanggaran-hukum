@@ -4,28 +4,28 @@
 
 <div class="main-addkd-container" style="margin-top: 10px; margin: 10px; display: flex;">
   <div class="main-addkd" style="width: fit-content; display: flex; margin-right: 20px;">
-    <a class="tambah-dk" style="text-decoration: none;">Jumlah Pelanggaran {{$jumlah_pelanggaran}}</a>
+    <a href="{{ route('admin.index') }}" class="tambah-dk" style="text-decoration: none;">Jumlah Pelanggaran {{$jumlah_pelanggaran}}</a>
     <a href="{{ url('/baru') }}" class="tambah-icon" class="icon" style="margin-left: 10px;">
         <i data-feather="plus-circle" class="text-primary"></i>
     </a>
   </div>
 
   <div class="main-addkd" style="width: fit-content; display: flex;">
-    <a class="tambah-dk" style="text-decoration: none;">Jumlah Klasifikasi {{$jumlah_klasifikasi}}</a>
+    <a href="{{ url('/klasifikasi') }}" class="tambah-dk" style="text-decoration: none;">Jumlah Klasifikasi {{$jumlah_klasifikasi}}</a>
     <a href="{{ url('/klasifikasi') }}" class="tambah-icon" class="icon" style="margin-left: 10px;">
         <i data-feather="plus-circle" class="text-primary"></i>
     </a>
   </div>
 
   <div class="main-addkd" style="width: fit-content; display: flex; margin-right: 20px;">
-    <a class="tambah-dk" style="text-decoration: none;">Jumlah Kecamatan {{$jumlahKecamatan}}</a>
+    <a href="{{ url('/kecamatan') }}" class="tambah-dk" style="text-decoration: none;">Jumlah Kecamatan {{$jumlahKecamatan}}</a>
     <a href="{{ url('/kecamatan') }}" class="tambah-icon" class="icon" style="margin-left: 10px;">
         <i data-feather="plus-circle" class="text-primary"></i>
     </a>
   </div>
 
   <div class="main-addkd" style="width: fit-content; display: flex;">
-    <a class="tambah-dk" style="text-decoration: none;">Jumlah Desa  {{$jumlah_desa}}</a>
+    <a href="{{ url('/desa') }}"  class="tambah-dk" style="text-decoration: none;">Jumlah Desa  {{$jumlah_desa}}</a>
     <a href="{{ url('/desa') }}" class="tambah-icon" class="icon" style="margin-left: 10px;">
         <i data-feather="plus-circle" class="text-primary"></i>
     </a>
