@@ -5,7 +5,7 @@
 <div class="content">
   <div class="content-edit">
     <h2>Edit Klasifikasi</h2>
-    <form action="{{ route('klasifikasi.update', $klasifikasi->kode_klasifikasi) }}" method="POST" onsubmit="return validateForm()">
+    <form action="/editklasifikasi/{{$klasifikasi->kode_klasifikasi}}" method="POST" onsubmit="return validateForm()">
     @csrf
     @method('PUT')
       <div class="form-group">
@@ -32,7 +32,7 @@
       <div class="form-group">
         <label for="kode_direktori"> <strong>Direktori</strong></label>
         <select class="form-control" name="kode_direktori" id="kode_direktori" required>
-          <option selected disabled >{{ $datas_klasifikasi->nama_direktori }}</option>
+          <option selected disabled >{{ $klasifikasi->kode_direktori_id }}</option>
           @foreach ($direktoris as $direktori)
           <option value="{{ $direktori?->kode_direktori }}">{{ $direktori?->nama_direktori }}</option>
           @endforeach

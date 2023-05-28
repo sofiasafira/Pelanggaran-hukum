@@ -1,6 +1,6 @@
 @extends('layout.layadmin2')
 
-@section('containeradmin2')
+@section('containeradmin2') 
 
 <div class="content">
         <div class="content-edit">
@@ -9,23 +9,21 @@
             @csrf  
             @method('PUT')
             <div class="form-group">
-                <label for="kode_kabupaten"> <strong>Nama Kabupaten</strong></label>
-                <input name="kode_kabupaten" class="form-control" id="kode_kabupaten" value="{{ $kecamatan->kode_kab_id}}">
+                <label for="kode_kabupaten"><strong>Kode Kabupaten</strong></label>
+                <input name="kode_kabupaten" class="form-control" id="kode_kabupaten" value="{{ $kecamatan->kode_kab_id }}" readonly>
             </div>
             <div class="form-group">
                 <input type="hidden" name="geojson_kec" class="form-control" id="geojson_kec" value="xxx">
             </div>   
-
-            <div class="form-group">
-                <label for="kode_kecamatan"><strong>Kode Kecmatan</strong></label>
-                <input type="text" name="kode_kecamatan" class="form-control @error('kode_kecamatan') is-invalid @enderror" id="kode_kecamatan" placeholder="kode_kecamatan" value="{{ old('kode_kec') ? old('kode_kec') : $kode_kec }}" required>
+           <div class="form-group">
+                <label for="kode_kec"><strong>Kode Kecmatan</strong></label>
+                <input type="text" name="kode_kec" class="form-control @error('kode_kec') is-invalid @enderror" id="kode_kec" placeholder="kode_kec" value="{{ old('kode_kec') ? old('kode_kec') : $kode_kec }}" required>
                 @error('kode_kecamatan')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>
                 @enderror
             </div> 
-
             <div class="form-group">
                 <label for="nama_kecamatan"><strong>Nama Kecamatan</strong></label>
                 <input type="text" name="nama_kecamatan" class="form-control @error('nama_kecamatan') is-invalid @enderror" id="nama_kecamatan" placeholder="nama_kecamatan" value="{{ $kecamatan->nama_kec }}" required>
@@ -35,7 +33,6 @@
                 </div>
                 @enderror
             </div>
-
             <input type="submit" value="Edit">
         </form>
     </div>

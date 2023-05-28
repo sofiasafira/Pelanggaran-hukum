@@ -28,7 +28,7 @@ class Kecamatan extends Model
     public function getGeojsonKecAttribute()
     {
         // konversi field "geometry" dari database ke dalam format GeoJSON
-        $geometry = json_decode($this->geometry);
+        $geometry = json_decode($this->geometry);-
         $geojson = [
             'type' => 'Feature',
             'geometry' => $geometry,

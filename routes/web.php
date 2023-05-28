@@ -5,6 +5,7 @@ use App\Http\Controllers\KlasifikasiController;
 use App\Http\Controllers\KecamatanController;
 use App\Http\Controllers\DesaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,24 +55,23 @@ Route::get('/detail/{kode_pelanggaran}', [DataPelanggaranController::class, 'sho
 
 
 // crud data klasifikasi
-Route::resource('klasifikasi', KlasifikasiController::class);
-Route::get('/klasifikasi/edit/{kode_klasifikasi}', [KlasifikasiController::class, 'edit'])->name('klasifikasi.edit');
-Route::put('/klasifikasi/{kode_klasifikasi}/update', [KlasifikasiController::class, 'update'])->name('klasifikasi.update');
+Route::get('/klasifikasi', 'App\Http\Controllers\KlasifikasiController@index');
+Route::post('/tambahklasifikasi', 'App\Http\Controllers\KlasifikasiController@store');
+Route::get('/editklasifikasi/{kode_klasifikasi}/edit', 'App\Http\Controllers\KlasifikasiController@edit');
+Route::put('/editklasifikasi/{kode_klasifikasi}', 'App\Http\Controllers\KlasifikasiController@update'); 
 
 
 // crud data kecamatan
-Route::resource('kecamatan', KecamatanController::class);
-Route::get('/editkecamatan/{kode_kec}/edit', [KecamatanController::class, "edit"]);
-Route::put('/editkecamatan/{kode_kec}', [KecamatanController::class, "update"]);
-
+Route::get('/kecamatan', 'App\Http\Controllers\KecamatanController@index');
+Route::post('/tambahkecamatan', 'App\Http\Controllers\KecamatanController@store');
+Route::get('/editkecamatan/{kode_kec}/edit', 'App\Http\Controllers\KecamatanController@edit');
+Route::put('/editkecamatan/{kode_kec}', 'App\Http\Controllers\KecamatanController@update');
 
 // crud data desa
-Route::resource('desa', DesaController::class);
-Route::get('/editdesa/{kode_des}/edit', [DesaController::class, "edit"]);
-Route::post('/editdesa/{kode_des}/update', [DesaController::class, "update"])->name('desa.update');
-
-
-
+Route::get('/desa', 'App\Http\Controllers\DesaController@index');
+Route::post('/tambahdesa', 'App\Http\Controllers\DesaController@store');
+Route::get('/editdesa/{kode_des}/edit', 'App\Http\Controllers\DesaController@edit');
+Route::put('/editdesa/{kode_des}', 'App\Http\Controllers\DesaController@update');
 
 
 // dpopdown ajax direktori dan klasifikasi
@@ -97,3 +97,4 @@ Route::get('/geojson/desa/{kode_des}', [DesaController::class, 'getGeoJSONByKode
 
 Route::put('/admin/update/{kode_pelanggaran}', [DataPelanggaranController::class, 'update'])->name('admin.update');
 
+Route::get('/get-klasifikasi/{kodeDirektori}', 'DashboardController@getKlasifikasi');

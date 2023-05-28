@@ -5,26 +5,21 @@
 <div class="content">
         <div class="content-edit">
         <h2>Edit Desa</h2>
-        <form action="/editdesa/{{$desa->kode_des}}/update" method="POST">
+        <form action="/editdesa/{{$desa->kode_des}}" method="POST">
             @csrf  
-            @method('POST')
+            @method('PUT')
             <div class="form-group">
-                <label for="kode_kecamatan"> <strong>Kode Kecamatan</strong></label>
-                <select class="form-control" name="kode_kecamatan" id="kode_kecamatan" required>
-                <option selected disabled>{{ $desa->kode_kec_id }}</option>
-                @foreach ($kecamatans as $kec)
-                <option value="{{ $kec->kode_kec}}">{{ $kec->nama_kec }}</option>
-                @endforeach
-                </select>
+                <label for="kode_kecamatan"><strong>Kode Kecamatan</strong></label>
+                <input name="kode_kecamatan" class="form-control" id="kode_kabupaten" value="{{ $desa->kode_kec_id}}" readonly>
             </div>
             <div class="form-group">
                 <input type="hidden" name="geojson_des" class="form-control" id="geojson_des" value="xxx">
             </div>   
 
             <div class="form-group">
-                <label for="kode_desa"><strong>Kode Desa</strong></label>
-                <input type="text" name="kode_desa" class="form-control @error('kode_desa') is-invalid @enderror" id="kode_desa" placeholder="kode_desa" value="{{ old('kode_desa') ? old('kode_desa') : $kode_des }}" required>
-                @error('kode_desa')
+                <label for="kode_des"><strong>Kode Desa</strong></label>
+                <input type="text" name="kode_des" class="form-control @error('kode_desa') is-invalid @enderror" id="kode_des" placeholder="kode_des" value="{{ old('kode_des') ? old('kode_des') : $kode_des }}" required>
+                @error('kode_des')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>

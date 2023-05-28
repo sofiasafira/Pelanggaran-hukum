@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\Kecamatan;
 
 
+
 class KecamatanController extends Controller
 {
     
@@ -57,53 +58,52 @@ class KecamatanController extends Controller
      */
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'kode_kecamatan' => 'required',
             'nama_kecamatan' => 'required',
             'kode_kabupaten' => 'required'
         ]);
-
+    
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
     
-        $kecamatan = new kecamatan;
-        $kecamatan->kode_kab_id = $request->kode_kabupaten;
-        $kecamatan->kode_kec = $request->kode_kecamatan;
-        $kecamatan->nama_kec = $request->nama_kecamatan;
-        $kecamatan->geojson_kec = $request->geojson_kec;
-        $kecamatan->save();
+        $kecamatanData = [
+            'kode_kab_id' => $request->kode_kabupaten,
+            'kode_kec' => $request->kode_kecamatan,
+            'nama_kec' => $request->nama_kecamatan,
+            'geojson_kec' => $request->geojson_kec
+        ];
     
-        return redirect()->back()->withSuccess('kecamatan berhasil ditambahkan');
+        DB::table('kecamatans')->insert($kecamatanData);
+    
+        return redirect('kecamatan')->with('success', 'Data Berhasil Ditambah.');
     }
 
     public function edit($kode_kec)
     {
-        $kecamatan = Kecamatan::with('kabupatens')->find($kode_kec);
-        // $kecamatans =  DB::table('kecamatans')
-        // ->join('kabupatens', 'kecamatans.kode_kab_id', '=', 'kabupatens.kode_kab')
-        // ->select('kecamatans.*', 'kabupatens.nama_kab')
-        // ->get();    
+        $kecamatan = Kecamatan::with('kabupatens')->find($kode_kec);   
         $kabupatens = kabupaten::all();                      
-    
-        // return view 
+
         return view('admin.edit_kecamatan', compact('kecamatan', 'kabupatens'), [
             'title' => 'Edit Kecamatan',
             'kode_kec' => $kode_kec // Menambahkan kode kec pada view
         ]);
     }
     
+
     public function update(Request $request, $kode_kec)
     {
-        $kecamatan = Kecamatan::find($kode_kec);
-        
-        $kecamatan->kode_kab_id = $request->input('kode_kabupaten');
-        $kecamatan->kode_kec = $request->input('kode_kecamatan');
-        $kecamatan->nama_kec = $request->input('nama_kecamatan');
-        $kecamatan->save();
-        // dd($kecamatan);
-        return redirect()->route('/add_kecamatan')->with('success', 'Data Berhasil Diupdate.');
+        // dd($request->kode_kec);
+        $kode_kec = $request->input('kode_kec');
+        DB::table('kecamatans')
+            ->where('kode_kec', $kode_kec)
+            ->update([
+                'nama_kec' => $request->input('nama_kecamatan')
+            ]);
+
+        return redirect('kecamatan')->with('success', 'Data Berhasil Diupdate.');
+
     }
 
     public function destroy(Kecamatan $kode_kec)

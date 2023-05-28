@@ -13,16 +13,14 @@ class Klasifikasi extends Model
     // protected $primaryKey = 'kode_klasifikasi';
 
 
-    // protected $primaryKey = 'kode_klasifikasi';
-
     public function jenis_pengadilan()
     {
         return $this->belongsTo(JenisPengadilan::class);
     }
 
-    public function direktori()
+    public function direktoris()
     {
-        return $this->belongsTo(Direktori::class);
+        return $this->belongsTo(Direktori::class, 'kode_direktori_id', 'kode_direktori');
     }
 
     public function data_pelanggaran()

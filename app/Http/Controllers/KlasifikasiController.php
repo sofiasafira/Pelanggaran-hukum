@@ -77,7 +77,7 @@ class KlasifikasiController extends Controller
         $klasifikasi->kode_direktori_id = $request->kode_direktori;
         $klasifikasi->save();
     
-        return redirect()->back()->withSuccess('Klasifikasi berhasil ditambahkan');
+         return redirect('klasifikasi')->with('success', 'Data Berhasil Ditambah.');
     }
     
 
@@ -89,40 +89,26 @@ class KlasifikasiController extends Controller
      */
     public function edit($kode_klasifikasi)
     {
-        $klasifikasi = \App\Models\Klasifikasi::where('kode_klasifikasi', $kode_klasifikasi)->first();
+        $klasifikasi = Klasifikasi::with('direktoris')->firstWhere('kode_klasifikasi', $kode_klasifikasi) ;
         $direktoris = Direktori::all();
-        $users = auth()->user();
-        $datas_klasifikasi = DB::table('klasifikasis')
-            ->join('direktoris', 'klasifikasis.kode_direktori_id', '=', 'direktoris.kode_direktori')
-            ->join('jenis_pengadilans', 'klasifikasis.kode_jenis_id', '=', 'jenis_pengadilans.kode_jenis')
-            ->select('klasifikasis.*', 'direktoris.nama_direktori', 'jenis_pengadilans.jenis_pengadilan')
-            ->where('klasifikasis.kode_klasifikasi', '=', $kode_klasifikasi)
-            ->first();
+
     
-        return view('admin.edit_klasifikasi', compact('klasifikasi', 'datas_klasifikasi', 'direktoris','users'),[
+        return view('admin.edit_klasifikasi', compact('klasifikasi', 'direktoris'),[
             "title" => "Edit Klasifikasi",
             'kode_klasifikasi' => $kode_klasifikasi
         ]);
     }
     
     public function update(Request $request, $kode_klasifikasi)
-    {
-        $validatedData = $request->validate([
-            'kode_klasifikasi' => 'required|unique:klasifikasis,kode_klasifikasi,'.$kode_klasifikasi,
-            'nama_klasifikasi' => 'required',
-            'kode_direktori' => 'required',
-            'kode_jenis_id' => 'required',
-        ]);
-    
-        $klasifikasi = Klasifikasi::where('kode_klasifikasi', $kode_klasifikasi)->firstOrFail();
-        $klasifikasi->kode_klasifikasi = $validatedData['kode_klasifikasi'];
-        $klasifikasi->nama_klasifikasi = $validatedData['nama_klasifikasi'];
-        $klasifikasi->kode_direktori = $validatedData['kode_direktori'];
-        $klasifikasi->kode_jenis_id = $validatedData['kode_jenis_id'];
-        $klasifikasi->save();
-        
-    
-        return redirect('/klasifikasi')->with('success', 'Data klasifikasi berhasil diubah.');
+    {   
+        $kode_klasifikasi = $request->input('kode_klasifikasi');
+        DB::table('klasifikasis')
+            ->where('kode_klasifikasi', $kode_klasifikasi)
+            ->update([
+                'nama_klasifikasi' => $request->input('nama_klasifikasi')
+            ]);
+
+        return redirect('klasifikasi')->with('success', 'Data Berhasil Diupdate.');
     }
     
     /**

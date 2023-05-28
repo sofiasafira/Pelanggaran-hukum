@@ -20,6 +20,11 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
    
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 </head>
 <body>
 	<!-- Navbar -->
@@ -42,14 +47,20 @@
             <div class="form-check form-switch">
                 <input type="checkbox" id="tampilkan-geojson-checkbox">
                 <label class="form-check-label" for="tampilkan-geojson-checkbox">Tampilkan Batas Administrasi</label>
-                <input type="checkbox" id="tampilkan-pengadilan-checkbox" />
+                <input type="checkbox" id="tampilkan-pengadilan-checkbox" checked />
                 <label class="form-check-label" for="tampilkan-pengadilan-checkbox">Tampilkan Lokasi Pengadilan</label>
             </div>
             <div class="total-pelanggaran">Total Pelanggaran Aceh : {{$total_pelanggaran}}</div>
-        </div>
-       
-        <div class="main" style="margin-top: 20px; margin: 20px; padding: 10px; border: 1px solid #ddd;">
-            <div id="map" style="height: 500px;"></div>
+        </div>       
+        <div class="main" style="margin-top: 20px; margin: 20px; padding: 30px; border: 1px solid #ddd; display: flex; flex-direction: column;">
+            <div class="judul-drop" style="background-color: #9d8e1e;">Mapping Sebaran Pelanggaran Hukum</div>
+            <ul class="bullet-list">
+                <li class="bullet-item red"><input type="checkbox" checked> Pengadilan Negeri</li>
+                <li class="bullet-item green"><input type="checkbox" checked> Mahkamah Syariah</li>
+                <li class="bullet-item blue"><input type="checkbox" checked> Pengadilan Militer</li>
+                <li class="bullet-item red"><input type="checkbox" checked> Pengadilan Tata Usaha Negara</li>
+            </ul>
+            <div id="map" style="height: 500px; border-radius: 5px"></div>
         </div>
 
         <div class="main" style="margin-top: 20px; margin: 20px; border: 1px solid #ddd; width: fit-content; display: flex; flex-direction: column; background-color: #9d8e1e;">
@@ -74,7 +85,17 @@
                 </div>
             </div>
         </div>
-
+        <div class="main" style="margin-top: 20px; margin: 20px; padding: 10px; border: 1px solid #ddd; display: flex; flex-direction: column; background-color: white; align-items: center;">
+        <div class="judul-grafik" style="flex: 1; margin-top: 8px; margin-bottom: 20px;">Grafik Pelanggaran Kabupaten/Kota Provinsi Aceh</div>
+        <div class="tahun-menu" style="margin-bottom: 20px;">
+            <label for="tahun">Pilih Tahun: </label>
+            <select id="tahun" onchange="updateChart()">
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+            </select>
+        </div>
+        <canvas id="lineChart"></canvas>
+    </div>
         <div class="main" style="margin-top: 20px; margin: 20px; padding: 30px; border: 1px solid #ddd; display: flex; flex-direction: column; background-color: white;">
             <div class="judul-drop">Jumlah Pelanggaran Berdasarkan Direktori</div>
             <ul class="bullet-list">
@@ -83,8 +104,7 @@
                 <li class="bullet-item blue">Pengadilan Militer</li>
                 <li class="bullet-item yellow">Pengadilan Tata Usaha Negara</li>
             </ul>
-
-            <div style="display: inline-block; vertical-align: top;">
+            <div style="display: inlineblock; vertical-align: top;">
                 <select id="dropdown2" style="width: 150px;">
                     <option value="" disabled selected>Pilih Direktori</option>
                     <option value="1">Pidana Khusus/Militer</option>
@@ -93,7 +113,7 @@
                     <option value="4">Perdata Agama</option>
                     <option value="5">TUN</option>
                     <option value="6">Perdata Khusus</option>
-                </select>
+                </select> 
                 <div id="informasi" style="text-align:left;" ></div>
             </div>
         </div> 
@@ -117,7 +137,136 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="assets-umum/js/jquery.json.min.js"></script>
 
+    <script>
+      var kabupaten = @json($kabupatengrafik);
+      var data = {
+        kabupaten: kabupaten,
+        pidanakhusus: {
+          "2022": <?php echo json_encode($kabupaten0122); ?>,
+          "2023": <?php echo json_encode($kabupaten0123); ?>
+        },
+        pidanaumum: {
+          "2022": <?php echo json_encode($kabupaten0222); ?>,
+          "2023": <?php echo json_encode($kabupaten0223); ?>
+        },
+        perdata: {
+          "2022": <?php echo json_encode($kabupaten0322); ?>,
+          "2023": <?php echo json_encode($kabupaten0323); ?>
+        },
+        perdataagama: {
+          "2022": <?php echo json_encode($kabupaten0422); ?>,
+          "2023": <?php echo json_encode($kabupaten0423); ?>
+        },
+        tun: {
+          "2022": <?php echo json_encode($kabupaten0522); ?>,
+          "2023": <?php echo json_encode($kabupaten0523); ?>
+        },
+        perdatakhusus: {
+          "2022": <?php echo json_encode($kabupaten0622); ?>,
+          "2023": <?php echo json_encode($kabupaten0623); ?>
+        }
+      };
 
+      // Line chart
+      const lineChartCanvas = document.getElementById("lineChart").getContext("2d");
+      let lineChart;
+
+      function createChart(tahun) {
+        if (lineChart) {
+          lineChart.destroy();
+        }
+
+        lineChart = new Chart(lineChartCanvas, {
+          type: "line",
+          data: {
+            labels: data.kabupaten,
+            datasets: [
+              {
+                label: "Pidana Khusus",
+                data: data.pidanakhusus[tahun],
+                fill: false,
+                borderColor: "rgba(54, 162, 235, 0.6)",
+                backgroundColor: "rgba(54, 162, 235, 0.6)"
+              },
+              {
+                label: "Pidana Umum",
+                data: data.pidanaumum[tahun],
+                fill: false,
+                borderColor: "rgba(255, 99, 132, 0.6)",
+                backgroundColor: "rgba(255, 99, 132, 0.6)"
+              },
+              {
+                label: "Perdata",
+                data: data.perdata[tahun],
+                fill: false,
+                borderColor: "rgba(75, 192, 192, 0.6)",
+                backgroundColor: "rgba(75, 192, 192, 0.6)"
+              },
+              {
+                label: "Perdata Agama",
+                data: data.perdataagama[tahun],
+                fill: false,
+                borderColor: "rgba(255, 206, 86, 0.6)",
+                backgroundColor: "rgba(255, 206, 86, 0.6)"
+              },
+              {
+                label: "TUN",
+                data: data.tun[tahun],
+                fill: false,
+                borderColor: "rgba(153, 102, 255, 0.6)",
+                backgroundColor: "rgba(153, 102, 255, 0.6)"
+              },
+              {
+                label: "Perdata Khusus",
+                data: data.perdatakhusus[tahun],
+                fill: false,
+                borderColor: 'rgb(290, 90, 235, 0.6)',
+                backgroundColor: 'rgba(290, 90, 235, 0.6)',
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              x: {
+                display: true,
+                title: {
+                  display: true,
+                  text: "Kabupaten",
+                  font: {
+                    weight: 'bold',
+                    size: 20
+                  }
+                }
+              },
+              y: {
+                beginAtZero: true,
+                display: true,
+                title: {
+                  display: true,
+                  text: "Total Pelanggaran Direktori",
+                  font: {
+                    weight: 'bold',
+                    size: 20
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+
+      function updateChart() {
+        const select = document.getElementById("tahun");
+        const tahun = select.value;
+        createChart(tahun);
+      }
+
+      // Default chart
+      createChart("2022");
+
+    </script>
+    
     <!-- Diagram Batang -->
     <script>
         var ctx1 = document.getElementById('bar-chart-1').getContext('2d');
@@ -157,8 +306,7 @@
                 }
             }
         });
-
-        
+    
         var dropdown1 = document.getElementById('dropdown1');
             dropdown1.addEventListener('change', function() {
                 var year = this.value;
@@ -263,10 +411,14 @@
         });
 
         var map = L.map('map', {
-            center: [5.555075, 95.3251659],
-            zoom: 12,    
+            center: [ 4.5066293,96.3884842],
+            zoom: 8,    
         });
-        
+
+        // var map = L.map('map', {
+        //     center: [ 5.5449272,95.3236851],
+        //     zoom: 12,    
+        // });
 
         // Menambahkan layer pengadilan
         const pengadilanAcehpu = L.layerGroup();
@@ -392,12 +544,17 @@
                                 style: function(feature) {
                                     // set the color of the layer based on the value of jumlah_pelanggaran
                                     var color, weight, opacity;
-                                    if ({{ $jumlah_pelanggaran }} > 100) {
+                                    var total_pelanggaran = {{ $total_pelanggaran }};
+                                    if ({{ $jumlah_pelanggaran }} > total_pelanggaran / 2) {
                                         color = "#FF0000";
                                         weight = 2;
                                         opacity = 0.7;
-                                    } else if ({{ $jumlah_pelanggaran }} > 1) {
+                                    } else if ({{ $jumlah_pelanggaran }} > total_pelanggaran / 4) {
                                         color = "#FFA500";
+                                        weight = 1;
+                                        opacity = 0.7;
+                                    } else if ({{ $jumlah_pelanggaran }} > total_pelanggaran / 100) {
+                                        color = "#3DB7E4";
                                         weight = 1;
                                         opacity = 0.7;
                                     } else {
@@ -414,7 +571,7 @@
                                 onEachFeature: function(feature, layer) {
                                 layer.on('click', function() {
                                     map.fitBounds(layer.getBounds());
-                                    layer.bindPopup("<div style='background-color: #bea000; padding: 7px;'>Kabupaten {{ $list->nama_kab }} <br> Pidana Khusus: {{ $jumlah_pelanggarandir1 }} <br> Pidana Umum : {{ $jumlah_pelanggarandir2 }}<br> Perdata : {{ $jumlah_pelanggarandir3 }} <br> Perdata Khusus : {{ $jumlah_pelanggarandir4 }} <br> Perdata Agama : {{ $jumlah_pelanggarandir5 }} <br> TUN : {{ $jumlah_pelanggarandir6 }}</div>").openPopup();
+                                    layer.bindPopup("<div style='background-color: #bea000; border-radius:2px; padding: 5px;'>Kabupaten {{ $list->nama_kab }} <br> Pidana Khusus: {{ $jumlah_pelanggarandir1 }} <br> Pidana Umum : {{ $jumlah_pelanggarandir2 }}<br> Perdata : {{ $jumlah_pelanggarandir3 }} <br> Perdata Khusus : {{ $jumlah_pelanggarandir4 }} <br> Perdata Agama : {{ $jumlah_pelanggarandir5 }} <br> TUN : {{ $jumlah_pelanggarandir6 }}</div>").openPopup();
                                 });
 
                                     layer.bindTooltip(
@@ -424,7 +581,6 @@
                                         className: "custom-tooltip"
                                     }
                                     );
-
                                     // Ambil ukuran lebar geoJson kabupaten
                                     var bounds = layer.getBounds();
                                     var width = bounds.getEast() - bounds.getWest();
@@ -450,60 +606,9 @@
                         });
                 @endforeach
 
-                @foreach ($desas as $listdesa)
-
-                <?php
-                    $jumlah_pelanggarandes = DB::table('data_pelanggarans')
-                    ->join('desas', 'data_pelanggarans.kode_des_id', '=', 'desas.kode_des')
-                    ->where('data_pelanggarans.kode_des_id', $listdesa->kode_des)
-                    ->count();
-
-                ?>
-
-                $.getJSON("{{ $listdesa->geojson_des }}", function(data) {
-                    var desaLayer = L.geoJSON(data, {
-                        style: function(feature) {
-                            // Tentukan style berdasarkan nilai atribut tertentu
-                            var color;
-                            // if (feature.properties.nilai > 75) color = '#1a9850';
-                            // else if (feature.properties.nilai > 50) color = '#91cf60';
-                            // else if (feature.properties.nilai > 25) color = '#d9ef8b';
-                            // else color = '#fee08b';
-                            return {
-                                color: 'black', // set warna garis pinggir menjadi hitam
-                                weight: 1,
-                                opacity: 1,
-                                dashArray: '3',
-                                fillColor: color,
-                                fillOpacity: 0.1,
-                            };
-                        },
-                        onEachFeature: function(feature, layer) {
-                            // Tambahkan popup dengan informasi desa saat layer di-click
-                            layer.on('click', function(e) {
-                                var popupContent = '<h3>' + "{{ $listdesa->nama_des }}" + '</h3>' +
-                                                '<h4>' + "Total Pelanggaran: {{ $jumlah_pelanggarandes }}" + '</h4>' +
-                                                '<p>Nilai: ' + feature.properties.nilai + '</p>';
-                                L.popup()
-                                    .setLatLng(e.latlng)
-                                    .setContent(popupContent)
-                                    .openOn(map);
-                            });
-                        }
-                    });
-                    // Set zoom pada layer saat di-click
-                    desaLayer.on('click', function(e) {
-                        map.fitBounds(e.target.getBounds());
-                    });
-                    desaLayer.addTo(map);
-                });
-                @endforeach
-
+                // 
             }
         });
-
-       
-
         // set checkbox state on page load
         window.onload = function() {
             tampilkanGeojsonCheckbox.checked = true;
@@ -515,49 +620,58 @@
         const tampilkanPengadilanCheckbox = document.getElementById('tampilkan-pengadilan-checkbox');
         // Buat objek untuk menyimpan marker
         const markers = [];
-        // Tambahkan event listener untuk checkbox
-        tampilkanPengadilanCheckbox.addEventListener('change', function() {
-        if (this.checked) {
-            // Jika checkbox di-check, tampilkan marker
-            @foreach($titik as $titiks)
-            <?php
-                    $pelanggarans = DB::table("data_pelanggarans")->selectRaw('user_id, count(*) as jumlah')
-                                        ->where('user_id', $titiks->id)
-                                        ->groupBy('user_id')
-                                        ->first();
-                    $iconUrl = 'assets-umum/images/iconDefault.png';
-                    if($titiks->kode_jenis_id === "acehpu"){
-                        $iconUrl = 'assets-umum/images/iconA.png';
-                    } else if($titiks->kode_jenis_id == "acehpa"){
-                        $iconUrl = 'assets-umum/images/iconB.png';
-                    } else if ($titiks->kode_jenis_id == "acehptun") {
-                        $iconUrl = 'assets-umum/images/iconC.png';
-                    }
-                    ?>
-            var marker;
-            var icon = L.icon({
+
+        // Fungsi untuk menampilkan marker
+        function tampilkanMarker() {
+        @foreach($titik as $titiks)
+        <?php
+            $pelanggarans = DB::table("data_pelanggarans")->selectRaw('user_id, count(*) as jumlah')
+                            ->where('user_id', $titiks->id)
+                            ->groupBy('user_id')
+                            ->first();
+            $iconUrl = 'assets-umum/images/iconDefault.png';
+            if($titiks->kode_jenis_id === "acehpu"){
+            $iconUrl = 'assets-umum/images/iconA.png';
+            } else if($titiks->kode_jenis_id == "acehpa"){
+            $iconUrl = 'assets-umum/images/iconB.png';
+            } else if ($titiks->kode_jenis_id == "acehptun") {
+            $iconUrl = 'assets-umum/images/iconC.png';
+            }
+        ?>
+        var marker;
+        var icon = L.icon({
             iconUrl: '{{$iconUrl}}',
             iconSize: [40, 40],
             iconAnchor: [20, 40],
             popupAnchor: [0, -40]
-            });
-            marker = L.marker([{{$titiks->latitude}}, {{$titiks->longitude}}], {icon: icon}).addTo(map);
-            var popupContent = '<div class="popup-content">';
-            popupContent += '<img src="{{$titiks->gambar}}" alt="{{$titiks->nama_pengadilan}}" class="popup-image">';
-            popupContent += '<div class="popup-info">';
-            popupContent += '<h3>{{$titiks->nama_pengadilan}}</h3>';
-            popupContent += '<p>Total Pelanggaran: ' + {{$pelanggarans->jumlah ?? 0}} + '</p>';
-            popupContent += '<p><a href="{{$titiks->website}}" target="_blank" class="popup-kunjungi">Kunjungi Halaman Website</a></p>';
-            popupContent += '<div class="popup-direction">';
-            popupContent += '<a href="{{$titiks->maps}}"><img src="assets-umum/images/direction.png" alt="Direction Logo" class="popup-direction-logo"></a>';
-            popupContent += '<a href="{{$titiks->sipp}}" target="_blank" class="popup-direction-button">Telusuri Proses Perkara</a>';
-            popupContent += '</div>';
-            popupContent += '</div>';
-            popupContent += '</div>';
-            popupContent += '</div>';
-            marker.bindPopup(popupContent);
-            markers.push(marker);
-            @endforeach
+        });
+        marker = L.marker([{{$titiks->latitude}}, {{$titiks->longitude}}], {icon: icon}).addTo(map);
+        var popupContent = '<div class="popup-content">';
+        popupContent += '<img src="{{$titiks->gambar}}" alt="{{$titiks->nama_pengadilan}}" class="popup-image">';
+        popupContent += '<div class="popup-info">';
+        popupContent += '<h3>{{$titiks->nama_pengadilan}}</h3>';
+        popupContent += '<p>Total Pelanggaran: ' + {{$pelanggarans->jumlah ?? 0}} + '</p>';
+        popupContent += '<p><a href="{{$titiks->website}}" target="_blank" class="popup-kunjungi">Kunjungi Halaman Website</a></p>';
+        popupContent += '<div class="popup-direction">';
+        popupContent += '<a href="{{$titiks->maps}}"><img src="assets-umum/images/direction.png" alt="Direction Logo" class="popup-direction-logo"></a>';
+        popupContent += '<a href="{{$titiks->sipp}}" target="_blank" class="popup-direction-button">Telusuri Proses Perkara</a>';
+        popupContent += '</div>';
+        popupContent += '</div>';
+        popupContent += '</div>';
+        popupContent += '</div>';
+        marker.bindPopup(popupContent);
+        markers.push(marker);
+        @endforeach
+        }
+
+        // Tampilkan marker saat halaman dimuat
+        tampilkanMarker();
+
+        // Tambahkan event listener untuk checkbox
+        tampilkanPengadilanCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            // Jika checkbox di-check, tampilkan marker
+            tampilkanMarker();
         } else {
             // Jika checkbox tidak di-check, sembunyikan marker
             markers.forEach(function(marker) {
@@ -565,7 +679,8 @@
             });
             markers.length = 0;
         }
-        });       
+        });
+
     </script>
    
     <!-- Dropdown Informasi Jumlah Untuk Tiap Direktori -->
@@ -1175,19 +1290,758 @@
         });
     </script>
     <script>
+        // let latitude = 0;
+        // let longitude = 0;
+
+        // // Inisialisasi layer marker
+        // var pengadilanpu = L.layerGroup();
+        // var pengadilanpa = L.layerGroup();
+        // var pengadilanptun = L.layerGroup();
+        // var pengadilanpn = L.layerGroup();
+        // var pengadilanfa = L.layerGroup();
+
+        // // Menambahkan fungsi untuk mengupdate marker pada checkbox
+        // function updateMarkerVisibility(layer, checkbox) {
+        //     if (checkbox.checked) {
+        //         map.addLayer(layer);
+        //     } else {
+        //         map.removeLayer(layer);
+        //     }
+        // }
+
+        // // Mendapatkan referensi ke checkbox
+        // var redCheckbox = document.querySelector('.red input[type="checkbox"]');
+        // var greenCheckbox = document.querySelector('.green input[type="checkbox"]');
+        // var blueCheckbox = document.querySelector('.blue input[type="checkbox"]');
+        // var yellowCheckbox = document.querySelector('.yellow input[type="checkbox"]');
+
+        // // Menambahkan event listener ke setiap checkbox
+        // redCheckbox.addEventListener('change', function () {
+        // updateMarkerVisibility(pengadilanpu, this);
+        // });
+
+        // greenCheckbox.addEventListener('change', function () {
+        // updateMarkerVisibility(pengadilanpa, this);
+        // });
+
+        // blueCheckbox.addEventListener('change', function () {
+        // updateMarkerVisibility(pengadilanptun, this);
+        // });
+
+        // yellowCheckbox.addEventListener('change', function () {
+        // updateMarkerVisibility(pengadilanpn, this);
+        // });
+
+        // // Saat load pertama halaman, aktifkan semua checkbox
+        // redCheckbox.checked = true;
+        // greenCheckbox.checked = true;
+        // blueCheckbox.checked = true;
+        // yellowCheckbox.checked = true;
+
+        // // Tampilkan semua titik pada layer saat halaman pertama dimuat
+        // pengadilanpu.addTo(map);
+        // pengadilanpa.addTo(map);
+        // pengadilanptun.addTo(map);
+        // pengadilanpn.addTo(map);
+
+
         // @foreach($titikdir as $titikpel)
-        //     var mark;
-        //     mark = L.marker([{{$titikpel->latitude}}, {{$titikpel->longitude}}]).addTo(map);         
+        //     latitude = {!! json_encode($titikpel->latitude) !!};
+        //     longitude = {!! json_encode($titikpel->longitude) !!};
+        //     kode_direktori_id = {!! json_encode($titikpel->kode_direktori_id) !!};
+        //     kode_klasifikasi_id = {!! json_encode($titikpel->kode_klasifikasi_id) !!};
+        //     user_id = {!! json_encode($titikpel->user_id) !!};
+
+        //     if (latitude && longitude && String(parseFloat(latitude)) !== 'NaN' && String(parseFloat(longitude)) !== 'NaN') {
+        //     let markerColor = 'blue'; // Warna marker default
+
+        //     let kodeDirektoriColorMap = {
+        //         'dir01': 'red',
+        //         'dir02': 'green',
+        //         'dir03': 'yellow',
+        //         'dir04': 'orange',
+        //         'dir05': 'purple'
+        //     };
+
+        //     if (kodeDirektoriColorMap.hasOwnProperty(kode_direktori_id)) {
+        //         markerColor = kodeDirektoriColorMap[kode_direktori_id];
+        //     }
+
+        //     var marker = L.circle([parseFloat(latitude), parseFloat(longitude)], {
+        //         radius: 5, // Ubah radius sesuai dengan ukuran yang diinginkan
+        //         fill: true,
+        //         color: markerColor, // Menggunakan warna marker berdasarkan kode_direktori_id
+        //         fillColor: markerColor,
+        //         fillOpacity: 1
+        //     });
+
+        //     // Tambahkan marker ke layer yang sesuai berdasarkan checkbox
+        //     if (user_id >= 11112 && user_id <= 11131) {
+        //         if (redCheckbox.checked) {
+        //         pengadilanpu.addLayer(marker);
+        //         } else {
+        //         pengadilanpu.removeLayer(marker);
+        //         }
+        //     } else if (user_id >= 11132 && user_id <= 11155) {
+        //         if (greenCheckbox.checked) {
+        //         pengadilanpa.addLayer(marker);
+        //         } else {
+        //         pengadilanpa.removeLayer(marker);
+        //         }
+        //     } else if (user_id == 11156) {
+        //         if (blueCheckbox.checked) {
+        //         pengadilanptun.addLayer(marker);
+        //         } else {
+        //         pengadilanptun.removeLayer(marker);
+        //         }
+        //     } else if (user_id == 11157) {
+        //         if (yellowCheckbox.checked) {
+        //         pengadilanpn.addLayer(marker);
+        //         } else {
+        //         pengadilanpn.removeLayer(marker);
+        //         }
+        //     }
+        // }
+        // @endforeach
+        // Kode untuk membuat legenda
+        var legend = L.control({ position: 'bottomleft' });
+
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend');
+            var labels = [];
+            var total_pelanggaran = {{ $total_pelanggaran }};
+            var jumlah_pelanggaran = {{ $jumlah_pelanggaran }};
+            
+            // Menambahkan judul legenda
+            div.innerHTML += '<h4 class="legend-title">Warna Kabupaten</h4>';
+
+                labels.push(Math.round(total_pelanggaran / 100) + ' - ' + Math.round(total_pelanggaran / 4));
+                labels.push(Math.round(total_pelanggaran / 4) + ' - ' + Math.round(total_pelanggaran / 2));
+                labels.push(Math.round(total_pelanggaran / 2) + ' - ' + Math.round(total_pelanggaran));
+            
+            
+            for (var i = 0; i < labels.length; i++) {
+            var labelColor;
+
+            // Tentukan warna sesuai dengan label
+            if (labels[i] === Math.round(total_pelanggaran / 2) + ' - ' + Math.round(total_pelanggaran)) {
+                labelColor = 'rgba(255, 0, 0, 0.7)'; // Warna untuk Label (total_pelanggaran / 2) - total_pelanggaran
+            } else if (labels[i] === Math.round(total_pelanggaran / 4) + ' - ' + Math.round(total_pelanggaran / 2)) {
+                labelColor = 'rgba(255, 165, 0, 0.7)'; // Warna untuk Label (total_pelanggaran / 4) - (total_pelanggaran / 2)
+            } else {
+                // Warna default untuk label lainnya
+                labelColor = 'rgba(61, 183, 228, 0.7)'; // Warna hitam
+            }
+
+
+            div.innerHTML +=
+                '<i style="background:' + labelColor + '"></i> ' +
+                labels[i] + (labels[i + 1] ? '<br>' : '');
+        }
+
+            return div;
+        };
+
+        legend.addTo(map);
+
+        // Mengubah style CSS untuk background legenda menjadi putih
+        var legendStyle = document.getElementsByClassName('info legend')[0].style;
+        legendStyle.backgroundColor = "#FFFFFF";
+        legendStyle.padding = "10px";
+        legendStyle.borderRadius = "8px";
+
+        // Mengubah style CSS untuk judul legenda agar berada di tengah
+        var titleStyle = document.getElementsByClassName('legend-title')[0].style;
+        titleStyle.textAlign = "center";
+
+        
+        // Tambahkan dropdown menu untuk legend
+        var legendControl = L.control({ position: 'topright' });
+        var selectedKodeDirektori = '';
+        legendControl.onAdd = function (map) {
+        var container = L.DomUtil.create('div', 'legend-container');
+
+        var select = L.DomUtil.create('select', 'form-control', container);
+        var options = [
+            { value: '', label: 'LEGEND WARNA DIREKTORI KASUS'},
+            { value: 'option1', label: 'Pidana Khusus/Militer', kodeDirektori: 'dir01' },
+            { value: 'option2', label: 'Pidana Umum', kodeDirektori: 'dir02' },
+            { value: 'option3', label: 'Perdata', kodeDirektori: 'dir03' },
+            { value: 'option4', label: 'Perdata Agama', kodeDirektori: 'dir04' },
+            { value: 'option5', label: 'TUN', kodeDirektori: 'dir05' },
+            { value: 'option6', label: 'Perdata Khusus', kodeDirektori: 'dir06' }
+        ];
+        select.addEventListener('change', function () {
+            selectedKodeDirektori = this.value;
+            var selectedOption = this.value;
+            var kodeDirektori = options.find(function (option) {
+            return option.value === selectedOption;
+            }).kodeDirektori;
+            var legendText = getKlasifikasiByKodeDirektori(kodeDirektori).join('\n');
+            updateLegend(legendText);
+            selectedKodeDirektori = this.value;
+            filterMarkers();
+        });
+
+        for (var i = 0; i < options.length; i++) {
+            var option = options[i];
+            var optionElement = L.DomUtil.create('option', '', select);
+            optionElement.value = option.value;
+            optionElement.text = option.label;
+        }
+
+        var legend = L.DomUtil.create('div', 'legend', container);
+            legend.style.maxWidth = '200px';
+            legend.style.fontSize = '8px';
+            legend.style.lineHeight = '1.4';
+            legend.style.backgroundColor = 'white';
+            legend.textContent = '';
+
+        L.DomEvent.disableClickPropagation(container);
+        return container;
+        };
+
+
+        legendControl.addTo(map);
+        var dir = JSON.parse('{!! $dirJson !!}');
+        // Function to retrieve klasifikasi based on kodeDirektori
+        function getKlasifikasiByKodeDirektori(kodeDirektori) {
+            var result = [];
+            for (var i = 0; i < dir.length; i++) {
+                if (dir[i].kode_direktori_id === kodeDirektori) {
+                    result.push(dir[i].nama_klasifikasi);
+                }
+            }
+            return result;
+        }
+
+        // Fungsi untuk memfilter marker berdasarkan direktori kasus yang dipilih
+        // Fungsi untuk memfilter marker berdasarkan direktori kasus yang dipilih
+        // function filterMarkers() {
+
+        // let latitude = 0;
+        // let longitude = 0;
+
+        // // Inisialisasi layer marker
+        // var layer_dir01 = L.layerGroup(); 
+        // var layer_dir02 = L.layerGroup();
+        // var layer_dir03 = L.layerGroup();
+        // var layer_dir04 = L.layerGroup(); 
+        // var layer_dir05 = L.layerGroup();
+        // var layer_dir06 = L.layerGroup();
+
+        // // Tampilkan semua titik pada layer saat halaman pertama dimuat
+        // layer_dir01.addTo(map);
+        // layer_dir02.addTo(map);
+        // layer_dir03.addTo(map);
+        // layer_dir04.addTo(map);
+        // layer_dir05.addTo(map);
+        // layer_dir06.addTo(map);
+
+
+        // @foreach($titikdir as $titikpel)
+        //     latitude = {!! json_encode($titikpel->latitude) !!};
+        //     longitude = {!! json_encode($titikpel->longitude) !!};
+        //     kode_direktori_id = {!! json_encode($titikpel->kode_direktori_id) !!};
+        //     kode_klasifikasi_id = {!! json_encode($titikpel->kode_klasifikasi_id) !!};
+        //     user_id = {!! json_encode($titikpel->user_id) !!};
+
+        //     if (latitude && longitude && String(parseFloat(latitude)) !== 'NaN' && String(parseFloat(longitude)) !== 'NaN') {
+        //         let markerColor = 'blue'; // Warna marker default
+
+        //         let kodeKlasifikasiColorMap = {
+        //                         'anak': 'rgba(229, 82, 42, 1)',
+        //                         'disersi': 'rgba(229, 82, 42, 0.9230769230769231)',
+        //                         'logging': 'rgba(255, 0, 0, 0.9166666666666666)',
+        //                         'ite': 'rgba(229, 82, 42, 0.8461538461538461)',
+        //                         'kdrt': 'rgba(229, 82, 42, 0.7692307692307692)',
+        //                         'kpbnan': 'rgba(229, 82, 42, 0.6923076923076923)',
+        //                         'ksusilaan': 'rgba(229, 82, 42, 0.5384615384615384)',
+        //                         'kropsi': 'rgba(229, 82, 42, 0.6153846153846154)',
+        //                         'lainlaina': 'rgba(128, 0, 0, 0.33333333333333337)',
+        //                         'linhdp': 'rgba(229, 82, 42, 0.3846153846153846)',
+        //                         'likhip': 'rgba(229, 82, 42, 0.46153846153846156)',
+        //                         'mtauag':'rgba(255, 0, 0, 0.8333333333333334)',
+        //                         'narkot': 'rgba(255, 0, 0, 0.75)',
+        //                         'playrn': 'rgba(255, 0, 0, 0.5)',
+        //                         'pncuag': 'rgba(255, 0, 0, 0.41666666666666663)',
+        //                         'perabh': 'rgba(255, 0, 0, 0.6666666666666667)',
+        //                         'prbnkn': 'rgba(255, 0, 0, 0.33333333333333337)',
+        //                         'perorg': 'rgba(255, 0, 0, 0.5833333333333333)',
+        //                         'prmhnn': 'rgba(128, 0, 0, 0.9166666666666666)',
+        //                         'prpjkn': 'rgba(128, 0, 0, 0.75)',
+        //                         'prtmbgn': 'rgba(128, 0, 0, 0.6666666666666667)',
+        //                         'prngrfi': 'rgba(128, 0, 0, 0.8333333333333334)',
+        //                         'snjtapi': 'rgba(128, 0, 0, 0.5)',
+        //                         'sbordisi': 'rgba(128, 0, 0, 0.5833333333333333)',
+        //                         'uagpls': 'rgba(128, 0, 0, 0.41666666666666663)',
+        //                         'jnyat': 'rgba(0, 0, 205, 1)',
+        //                         'kekmluka': 'rgba(0, 0, 205, 0.6153846153846154)',
+        //                         'khtnn': 'rgba(0, 0, 205, 0.3846153846153846)',
+        //                         'kejterauper': 'rgba(0, 0, 205, 0.9230769230769231)',
+        //                         'ketekem': 'rgba(0, 0, 205, 0.5384615384615384)',
+        //                         'keternegra': 'rgba(0, 0, 205, 0.46153846153846156)',
+        //                         'kejtermer': 'rgba(0, 0, 205, 0.7692307692307692)',
+        //                         'keterorg': 'rgba(0, 0, 205, 0.7692307692307692)',
+        //                         'kejterkes': 'rgba(0, 0, 205, 0.8461538461538461)',
+        //                         'kejterum': 'rgba(0, 0, 205, 0.6923076923076923)',
+        //                         'lalulin': 'rgba(0, 50, 100, 0.9166666666666666)',
+        //                         'pmlsuan': 'rgba(0, 50, 100, 0.5833333333333333)',
+        //                         'pmbnhn': 'rgba(0, 50, 100, 0.6666666666666667)',
+        //                         'pmrsn': 'rgba(0, 50, 100, 0.5833333333333333)',
+        //                         'pncurian':'rgba(0, 50, 100, 0.41666666666666663)',
+        //                         'pngniayaan': '(PM) rgba(0, 0, 0, 0.8333333333333334)',
+        //                         'pngnyaan': 'rgba(0, 0, 0, 0.9166666666666666)',
+        //                         'pggelapan': 'rgba(0, 50, 100, 0.75)',
+        //                         'pnghnaan': 'rgba(0, 50, 100, 0.25)',
+        //                         'pnghinaan': 'rgba(0, 50, 100, 0.33333333333333337)',
+        //                         'prjdian': '(0, 0, 0, 0.6666666666666667)',
+        //                         'prskan': '(0, 0, 0, 0.5833333333333333)',
+        //                         'sphplsu': 'rgba(0, 0, 0, 0.5)',
+        //                         'lainlainc': 'rgba(25, 145, 112, 0.8333333333333334)',
+        //                         'pmbgianhrta': 'rgba(60, 240, 113, 0.8333333333333334)',
+        //                         'permelhukum': 'rgba(60, 240, 113, 1)',
+        //                         'prjnjian': 'rgba(60, 240, 113, 0.6666666666666667)',
+        //                         'prmohnn': 'rgba(107, 184, 35, 0.9166666666666666)',
+        //                         'tanah': 'rgba(107, 184, 35, 0.8333333333333334)',
+        //                         'wnprestasi':'rgba(25, 145, 112, 0.9166666666666666)',
+        //                         'waris': 'rgba(107, 184, 35, 0.75)',
+        //                         'hibah':'rgba(210, 50, 173, 1)',
+        //                         'hrtabrsm':'rgba(210, 50, 173, 0.9230769230769231)',
+        //                         'iznpolgmi':'rgba(210, 50, 173, 0.8461538461538461)',
+        //                         'pgshnnkah':'rgba(210, 50, 173, 0.7692307692307692)',
+        //                         'pmbtlnnkh':'rgba(210, 50, 173, 0.6923076923076923)',
+        //                         'prcraian':'rgba(210, 50, 173, 0.6153846153846154)',
+        //                         'prcraianb':'rgba(210, 50, 173, 0.5384615384615384)',
+        //                         'prwalian':'rgba(210, 50, 173, 0.46153846153846156)',
+        //                         'wakaf':'rgba(210, 50, 173, 0.3846153846153846)',
+        //                         'warisislm':'rgba(112, 8, 144, 0.9166666666666666)',
+        //                         'wasiat':'rgba(112, 8, 144, 0.8333333333333334)',
+        //                         'kip':'rgba(255, 253, 0, 1)',
+        //                         'kip2':'rgba(255, 253, 0, 0.8333333333333334)',
+        //                         'kpgwaian':'rgba(255, 253, 0, 0.6666666666666667)',
+        //                         'lainlaine':'rgba(200, 200, 90, 0.7)',
+        //                         'lelang':'rgba(255, 253, 0, 0.5)',
+        //                         'pajak':'rgba(255, 165, 0, 0.9)',
+        //                         'perijinan':'rgba(255, 165, 0, 0.8)',
+        //                         'prmhnn1':'rgba(255, 165, 0, 0.7)',
+        //                         'prtaipol':'rgba(255, 165, 0, 0.6)',
+        //                         'prtnahan':'rgba(200, 200, 90, 0.9)',
+        //                         'tender':'rgba(200, 200, 90, 0.8)',
+        //                         'parpol':'rgba(85, 86, 47, 1)',
+        //                         'phi':'rgba(85, 86, 47, 0.8333333333333334)'
+        //         };
+
+
+        //         if (kodeKlasifikasiColorMap.hasOwnProperty(kode_klasifikasi_id)) {
+        //             markerColor = kodeKlasifikasiColorMap[kode_klasifikasi_id];
+        //         }
+
+        //         var marker = L.circle([parseFloat(latitude), parseFloat(longitude)], {
+        //             radius: 5, // Ubah radius sesuai dengan ukuran yang diinginkan
+        //             fill: true,
+        //             color: markerColor, // Menggunakan warna marker berdasarkan kode_direktori_id
+        //             fillColor: markerColor,
+        //             fillOpacity: 1
+        //         });
+
+        //         // Tambahkan marker ke layer yang sesuai berdasarkan checkbox
+        //         if (kode_direktori_id === 'dir01') {
+        //             if (selectedKodeDirektori === 'option1') {
+        //                 map.removeLayer(marker); // Hapus marker sebelum menambahkannya ke layer
+        //                 layer_dir01.addLayer(marker);
+        //             } else {
+        //                 map.removeLayer(marker);
+        //             }
+        //         } else if (kode_direktori_id === 'dir02') {
+        //             if (selectedKodeDirektori === 'option2') {
+        //                 map.removeLayer(marker); // Hapus marker sebelum menambahkannya ke layer
+        //                 layer_dir02.addLayer(marker);
+        //             } else {
+        //                 map.removeLayer(marker);
+        //             }
+        //         } else if (kode_direktori_id === 'dir03') {
+        //             if (selectedKodeDirektori === 'option3') {
+        //                 map.removeLayer(marker);
+        //                 layer_dir03.addLayer(marker);
+        //             } else {
+        //                 map.removeLayer(marker);
+        //                 layer_dir03.removeLayer(marker);
+        //             }
+        //         } else if (kode_direktori_id === 'dir04') {
+        //             if (selectedKodeDirektori === 'option4') {
+        //                 map.removeLayer(marker);
+        //                 layer_dir04.addLayer(marker);
+        //             } else {
+        //                 map.removeLayer(marker);
+        //                 layer_dir04.removeLayer(marker);
+        //             }
+        //         } else if (kode_direktori_id === 'dir05') {
+        //             if (selectedKodeDirektori === 'option5') {
+        //                 map.removeLayer(marker);
+        //                 layer_dir05.addLayer(marker);
+        //             } else {
+        //                 map.removeLayer(marker);
+        //                 layer_dir05.removeLayer(marker);
+        //             }
+        //         } else {
+        //             if (selectedKodeDirektori === 'option6') {
+        //                 map.removeLayer(marker);
+        //                 layer_dir06.addLayer(marker);
+        //             } else {
+        //                 map.removeLayer(marker);
+        //                 layer_dir06.removeLayer(marker);
+        //             }
+        //         }
+
+        //     }
         // @endforeach
 
+        // }
+        // // Panggil fungsi filterMarkers saat halaman pertama dimuat
+        // filterMarkers();
+
+        // Panggil fungsi filterMarkers saat halaman pertama dimuat
+
+        // let lastMarker;
+
+        // filterMarkers();
+
+        // Fungsi untuk memfilter marker berdasarkan direktori kasus yang dipilih
+        function filterMarkers() {
+
+        let latitude = 0;
+        let longitude = 0;
+
+        // Inisialisasi layer marker
+        var pengadilanpu = L.layerGroup();
+        var pengadilanpa = L.layerGroup();
+        var pengadilanptun = L.layerGroup();
+        var pengadilanpn = L.layerGroup();
+        var pengadilanfa = L.layerGroup();
+
+        // Menambahkan fungsi untuk mengupdate marker pada checkbox
+        function updateMarkerVisibility(layer, checkbox) {
+            if (checkbox.checked) {
+                map.addLayer(layer);
+            } else {
+                map.removeLayer(layer);
+            }
+        }
+
+        // Mendapatkan referensi ke checkbox
+        var redCheckbox = document.querySelector('.red input[type="checkbox"]');
+        var greenCheckbox = document.querySelector('.green input[type="checkbox"]');
+        var blueCheckbox = document.querySelector('.blue input[type="checkbox"]');
+        var yellowCheckbox = document.querySelector('.yellow input[type="checkbox"]');
+
+        // Menambahkan event listener ke setiap checkbox
+        redCheckbox.addEventListener('change', function () {
+        updateMarkerVisibility(pengadilanpu, this);
+        });
+
+        greenCheckbox.addEventListener('change', function () {
+        updateMarkerVisibility(pengadilanpa, this);
+        });
+
+        blueCheckbox.addEventListener('change', function () {
+        updateMarkerVisibility(pengadilanptun, this);
+        });
+
+        yellowCheckbox.addEventListener('change', function () {
+        updateMarkerVisibility(pengadilanpn, this);
+        });
+
+        // Saat load pertama halaman, aktifkan semua checkbox
+        redCheckbox.checked = true;
+        greenCheckbox.checked = true;
+        blueCheckbox.checked = true;
+        yellowCheckbox.checked = true;
+
+        // Tampilkan semua titik pada layer saat halaman pertama dimuat
+        pengadilanpu.addTo(map);
+        pengadilanpa.addTo(map);
+        pengadilanptun.addTo(map);
+        pengadilanpn.addTo(map);
+
         @foreach($titikdir as $titikpel)
+            latitude = {!! json_encode($titikpel->latitude) !!};
+            longitude = {!! json_encode($titikpel->longitude) !!};
+            kode_direktori_id = {!! json_encode($titikpel->kode_direktori_id) !!};
+            kode_klasifikasi_id = {!! json_encode($titikpel->kode_klasifikasi_id) !!};
+            user_id = {!! json_encode($titikpel->user_id) !!};
 
-        let titikPelLat = {!! json_encode($titikpel->latitude) !!}
+            if (latitude && longitude && String(parseFloat(latitude)) !== 'NaN' && String(parseFloat(longitude)) !== 'NaN') {
+                let markerColor = 'blue'; // Warna marker default
 
-        let titikPelLot = {!! json_encode($titikpel->longitude) !!}
+                let kodeKlasifikasiColorMap = {
+                    'anak': 'rgba(229, 82, 42, 1)',
+                    'disersi': 'rgba(229, 82, 42, 0.9230769230769231)',
+                    'logging': 'rgba(255, 0, 0, 0.9166666666666666)',
+                    'ite': 'rgba(229, 82, 42, 0.8461538461538461)',
+                    'kdrt': 'rgba(229, 82, 42, 0.7692307692307692)',
+                    'kpbnan': 'rgba(229, 82, 42, 0.6923076923076923)',
+                    'ksusilaan': 'rgba(229, 82, 42, 0.5384615384615384)',
+                    'kropsi': 'rgba(229, 82, 42, 0.6153846153846154)',
+                    'lainlaina': 'rgba(128, 0, 0, 0.33333333333333337)',
+                    'linhdp': 'rgba(229, 82, 42, 0.3846153846153846)',
+                    'likhip': 'rgba(229, 82, 42, 0.46153846153846156)',
+                    'mtauag':'rgba(255, 0, 0, 0.8333333333333334)',
+                    'narkot': 'rgba(255, 0, 0, 0.75)',
+                    'playrn': 'rgba(255, 0, 0, 0.5)',
+                    'pncuag': 'rgba(255, 0, 0, 0.41666666666666663)',
+                    'perabh': 'rgba(255, 0, 0, 0.6666666666666667)',
+                    'prbnkn': 'rgba(255, 0, 0, 0.33333333333333337)',
+                    'perorg': 'rgba(255, 0, 0, 0.5833333333333333)',
+                    'prmhnn': 'rgba(128, 0, 0, 0.9166666666666666)',
+                    'prpjkn': 'rgba(128, 0, 0, 0.75)',
+                    'prtmbgn': 'rgba(128, 0, 0, 0.6666666666666667)',
+                    'prngrfi': 'rgba(128, 0, 0, 0.8333333333333334)',
+                    'snjtapi': 'rgba(128, 0, 0, 0.5)',
+                    'sbordisi': 'rgba(128, 0, 0, 0.5833333333333333)',
+                    'uagpls': 'rgba(128, 0, 0, 0.41666666666666663)',
+                    'jnyat': 'rgba(0, 0, 205, 1)',
+                    'kekmluka': 'rgba(0, 0, 205, 0.6153846153846154)',
+                    'khtnn': 'rgba(0, 0, 205, 0.3846153846153846)',
+                    'kejterauper': 'rgba(0, 0, 205, 0.9230769230769231)',
+                    'ketekem': 'rgba(0, 0, 205, 0.5384615384615384)',
+                    'keternegra': 'rgba(0, 0, 205, 0.46153846153846156)',
+                    'kejtermer': 'rgba(0, 0, 205, 0.7692307692307692)',
+                    'keterorg': 'rgba(0, 0, 205, 0.7692307692307692)',
+                    'kejterkes': 'rgba(0, 0, 205, 0.8461538461538461)',
+                    'kejterum': 'rgba(0, 0, 205, 0.6923076923076923)',
+                    'lalulin': 'rgba(0, 50, 100, 0.9166666666666666)',
+                    'pmlsuan': 'rgba(0, 50, 100, 0.5833333333333333)',
+                    'pmbnhn': 'rgba(0, 50, 100, 0.6666666666666667)',
+                    'pmrsn': 'rgba(0, 50, 100, 0.5833333333333333)',
+                    'pncurian':'rgba(0, 50, 100, 0.41666666666666663)',
+                    'pngniayaan': '(PM) rgba(0, 0, 0, 0.8333333333333334)',
+                    'pngnyaan': 'rgba(0, 0, 0, 0.9166666666666666)',
+                    'pggelapan': 'rgba(0, 50, 100, 0.75)',
+                    'pnghnaan': 'rgba(0, 50, 100, 0.25)',
+                    'pnghinaan': 'rgba(0, 50, 100, 0.33333333333333337)',
+                    'prjdian': '(0, 0, 0, 0.6666666666666667)',
+                    'prskan': '(0, 0, 0, 0.5833333333333333)',
+                    'sphplsu': 'rgba(0, 0, 0, 0.5)',
+                    'lainlainc': 'rgba(25, 145, 112, 0.8333333333333334)',
+                    'pmbgianhrta': 'rgba(60, 240, 113, 0.8333333333333334)',
+                    'permelhukum': 'rgba(60, 240, 113, 1)',
+                    'prjnjian': 'rgba(60, 240, 113, 0.6666666666666667)',
+                    'prmohnn': 'rgba(107, 184, 35, 0.9166666666666666)',
+                    'tanah': 'rgba(107, 184, 35, 0.8333333333333334)',
+                    'wnprestasi':'rgba(25, 145, 112, 0.9166666666666666)',
+                    'waris': 'rgba(107, 184, 35, 0.75)',
+                    'hibah':'rgba(210, 50, 173, 1)',
+                    'hrtabrsm':'rgba(210, 50, 173, 0.9230769230769231)',
+                    'iznpolgmi':'rgba(210, 50, 173, 0.8461538461538461)',
+                    'pgshnnkah':'rgba(210, 50, 173, 0.7692307692307692)',
+                    'pmbtlnnkh':'rgba(210, 50, 173, 0.6923076923076923)',
+                    'prcraian':'rgba(210, 50, 173, 0.6153846153846154)',
+                    'prcraianb':'rgba(210, 50, 173, 0.5384615384615384)',
+                    'prwalian':'rgba(210, 50, 173, 0.46153846153846156)',
+                    'wakaf':'rgba(210, 50, 173, 0.3846153846153846)',
+                    'warisislm':'rgba(112, 8, 144, 0.9166666666666666)',
+                    'wasiat':'rgba(112, 8, 144, 0.8333333333333334)',
+                    'kip':'rgba(255, 253, 0, 1)',
+                    'kip2':'rgba(255, 253, 0, 0.8333333333333334)',
+                    'kpgwaian':'rgba(255, 253, 0, 0.6666666666666667)',
+                    'lainlaine':'rgba(200, 200, 90, 0.7)',
+                    'lelang':'rgba(255, 253, 0, 0.5)',
+                    'pajak':'rgba(255, 165, 0, 0.9)',
+                    'perijinan':'rgba(255, 165, 0, 0.8)',
+                    'prmhnn1':'rgba(255, 165, 0, 0.7)',
+                    'prtaipol':'rgba(255, 165, 0, 0.6)',
+                    'prtnahan':'rgba(200, 200, 90, 0.9)',
+                    'tender':'rgba(200, 200, 90, 0.8)',
+                    'parpol':'rgba(85, 86, 47, 1)',
+                    'phi':'rgba(85, 86, 47, 0.8333333333333334)'
+                };
 
-        mark = L.marker([titikPelLat, titikPelLon]).addTo(map)
+                if (kodeKlasifikasiColorMap.hasOwnProperty(kode_klasifikasi_id)) {
+                    markerColor = kodeKlasifikasiColorMap[kode_klasifikasi_id];
+                }
+
+                var marker = L.circle([parseFloat(latitude), parseFloat(longitude)], {
+                    radius: 5, // Ubah radius sesuai dengan ukuran yang diinginkan
+                    fill: true,
+                    color: markerColor, // Menggunakan warna marker berdasarkan kode_direktori_id
+                    fillColor: markerColor,
+                    fillOpacity: 1
+                });
+
+                // Tambahkan marker ke layer yang sesuai berdasarkan checkbox
+                if (user_id >= 11112 && user_id <= 11131) {
+                    if (redCheckbox.checked) {
+                        pengadilanpu.addLayer(marker);
+                    } else {
+                        pengadilanpu.removeLayer(marker);
+                    }
+                } else if (user_id >= 11132 && user_id <= 11155) {
+                    if (greenCheckbox.checked) {
+                        pengadilanpa.addLayer(marker);
+                    } else {
+                        pengadilanpa.removeLayer(marker);
+                    }
+                } else if (user_id == 11157) {
+                    if (blueCheckbox.checked) {
+                        pengadilanptun.addLayer(marker);
+                    } else {
+                        pengadilanptun.removeLayer(marker);
+                    }
+                } else if (user_id == 11156) {
+                    if (yellowCheckbox.checked) {
+                        pengadilanpn.addLayer(marker);
+                    } else {
+                        pengadilanpn.removeLayer(marker);
+                    }
+                }
+            }
         @endforeach
+        }
+        // Panggil fungsi filterMarkers saat halaman pertama dimuat
+        filterMarkers();
+
+
+
+
+        // Function to update legend text
+        function updateLegend(legendText) {
+            var legend = document.querySelector('.legend');
+            legend.innerHTML = '';
+
+            var klasifikasiArray = legendText.split('\n');
+            var lainArray = [];
+            var lainBawahArray = [];
+
+            // Pisahkan klasifikasi menjadi dua array berdasarkan huruf depannya
+            for (var i = 0; i < klasifikasiArray.length; i++) {
+                var klasifikasi = klasifikasiArray[i];
+                if (klasifikasi.startsWith('Lain')) {
+                    lainBawahArray.push(klasifikasi);
+                } else {
+                    lainArray.push(klasifikasi);
+                }
+            }
+
+            // Gabungkan kembali array dengan klasifikasi lainnya di atas klasifikasi dengan huruf depan "Lain"
+            var klasifikasiTerurut = lainArray.concat(lainBawahArray);
+
+            // Iterasi melalui array klasifikasi terurut dan buat elemen legendItem untuk setiap klasifikasi
+            for (var i = 0; i < klasifikasiTerurut.length; i++) {
+                var klasifikasi = klasifikasiTerurut[i];
+                var legendItem = document.createElement('div');
+                legendItem.style.display = 'flex';
+                legendItem.style.alignItems = 'center';
+
+                // Add colored bullet
+                var bullet = document.createElement('div');
+                bullet.style.width = '10px';
+                bullet.style.height = '10px';
+                bullet.style.borderRadius = '50%';
+                bullet.style.marginRight = '5px';
+                bullet.style.backgroundColor = getColorByKodeDirektori(klasifikasi, i);
+                legendItem.appendChild(bullet);
+
+                // Add text
+                var text = document.createElement('div');
+                text.textContent = klasifikasi;
+                legendItem.appendChild(text);
+
+                legend.appendChild(legendItem);
+            }
+
+        }
+
+        function getColorByKodeDirektori(klasifikasi, index) {
+            var kodeDirektori = dir.find(function (item) {
+                return item.kode_direktori_id === klasifikasi;
+            });
+            console.log(selectedKodeDirektori); // Mencetak kodeDirektori ke konsol
+
+            // Logic to determine color based on kodeDirektori
+            if (selectedKodeDirektori === 'option1') {
+                console.log('Selected kodeDirektori: option1'); // Mencetak pilihan yang dipilih ke konsol            
+                var opacity;
+                if (index >= 17) {
+                    opacity = 1 - ((index - 16) / 12);
+                    var color = 'rgba(128, 0, 0, ' + opacity + ')';
+                } else if (index >= 9) {
+                    opacity = 1 - ((index - 8) / 12);
+                    var color = 'rgba(255, 0, 0, ' + opacity + ')';
+                } else {
+                    opacity = 1 - (index / 13);
+                    var color = 'rgba(229, 82, 42, ' + opacity + ')';
+                }               
+                console.log('Color:', color); // Mencetak warna yang dihasilkan ke konsol
+                return color;
+            } else if (selectedKodeDirektori === 'option2') {
+                console.log('Selected kodeDirektori: option2'); // Mencetak pilihan yang dipilih ke konsol            
+                var opacity;
+                if (index >= 18) {
+                    opacity = 1 - ((index - 17) / 12);
+                    var color = 'rgba(8, 128, 0, ' + opacity + ')';
+                } else if (index >= 9) {
+                    opacity = 1 - ((index - 8) / 12);
+                    var color = 'rgba(0, 50, 100, ' + opacity + ')';
+                } else {
+                    opacity = 1 - (index / 13);
+                    var color = 'rgba(0, 0, 205, ' + opacity + ')';
+                }               
+                console.log('Color:', color); // Mencetak warna yang dihasilkan ke konsol
+                return color;
+            } else if (selectedKodeDirektori === 'option3') {
+                console.log('Selected kodeDirektori: option3'); // Mencetak pilihan yang dipilih ke konsol            
+                var opacity;
+                if (index >= 6) {
+                    opacity = 1 - ((index - 5) / 12);
+                    var color = 'rgba(25, 145, 112, ' + opacity + ')';
+                } else if (index >= 3) {
+                    opacity = 1 - ((index - 2) / 12);
+                    var color = 'rgba(107, 184, 35, ' + opacity + ')';
+                } else {
+                    opacity = 1 - (index / 6);
+                    var color = 'rgba(60, 240, 113, ' + opacity + ')';
+                }               
+                console.log('Color:', color); // Mencetak warna yang dihasilkan ke konsol
+                return color;
+            } else if (selectedKodeDirektori === 'option4') {
+                console.log('Selected kodeDirektori: option4'); // Mencetak pilihan yang dipilih ke konsol            
+                var opacity;
+                if (index >= 18) {
+                    opacity = 1 - ((index - 17) / 12);
+                    var color = 'rgba(255, 0, 0, ' + opacity + ')';
+                } else if (index >= 9) {
+                    opacity = 1 - ((index - 8) / 12);
+                    var color = 'rgba(112, 8, 144, ' + opacity + ')';
+                } else {
+                    opacity = 1 - (index / 13);
+                    var color = 'rgba(210, 50, 173, ' + opacity + ')';
+                }               
+                console.log('Color:', color); // Mencetak warna yang dihasilkan ke konsol
+                return color;
+            } else if (selectedKodeDirektori === 'option5') {
+                console.log('Selected kodeDirektori: option5'); // Mencetak pilihan yang dipilih ke konsol            
+                var opacity;
+                if (index >= 8) {
+                    opacity = 1 - ((index - 7) / 10);
+                    var color = 'rgba(200, 200, 90, ' + opacity + ')';
+                } else if (index >= 4) {
+                    opacity = 1 - ((index - 3) / 10);
+                    var color = 'rgba(255, 165, 0, ' + opacity + ')';
+                } else {
+                    opacity = 1 - (index / 6);
+                    var color = 'rgba(255, 253, 0, ' + opacity + ')';
+                }               
+                console.log('Color:', color); // Mencetak warna yang dihasilkan ke konsol
+                return color;
+            } else {
+                console.log('Selected kodeDirektori: Unknown'); // Mencetak jika pilihan tidak dikenali ke konsol
+                opacity = 1 - (index / 6);
+                var color = 'rgba(85, 86, 47, ' + opacity + ')';
+                console.log('Color:', color);
+                return color;
+            }
+        }    
     </script>
 </body>
 </html>

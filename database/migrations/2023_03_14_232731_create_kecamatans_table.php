@@ -18,7 +18,7 @@ class CreateKecamatansTable extends Migration
             $table->string('kode_kab_id');
             $table->foreign('kode_kab_id')->references('kode_kab')->on('kabupatens');
             $table->string('nama_kec');
-            $table->string('geojson_kec');
+            $table->string('geojson_kec')->default('')->change();
             $table->timestamps();
         });
     }

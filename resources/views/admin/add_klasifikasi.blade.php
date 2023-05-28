@@ -9,7 +9,7 @@
     <?php
     $jumlah_pelanggaran = DB::table('data_pelanggarans')->where('user_id', auth()->user()->id)->count();
     ?>
-    <div class="total-pelanggaran">Total Pelanggaran Aceh : {{$jumlah_pelanggaran}}</div>
+    <div class="total-pelanggaran">Total Pelanggaran: {{$jumlah_pelanggaran}}</div>
 </div>
 
 <!-- Modal -->
@@ -17,7 +17,7 @@
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2>Tambah Klasifikasi</h2>
-    <form action="/klasifikasi" method="post" onsubmit="return validateForm()">
+    <form action="{{url('/tambahklasifikasi')}}" method="post" onsubmit="return validateForm()">
     @csrf  
     <div class="form-group">
         <label for="kode_klasifikasi"><strong>kode klasifikasi</strong></label>
@@ -91,7 +91,7 @@
         <td>{{ $dk->nama_direktori }}</td>
         <td>{{ $dk->nama_klasifikasi }}</td>
         <td>
-          <a class="icon" href="{{ route('klasifikasi.edit', $dk->kode_klasifikasi) }}"><i data-feather="edit" class="text-success"></i></a>
+          <a class="icon mr-2" href="/editklasifikasi/{{$dk->kode_klasifikasi}}/edit"><i data-feather="edit" class="text-success"></i></a>
         </td>
       </tr>
     @endif

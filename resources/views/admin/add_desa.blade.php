@@ -9,7 +9,7 @@
     <?php
     $jumlah_pelanggaran = DB::table('data_pelanggarans')->where('user_id', auth()->user()->id)->count();
     ?>
-    <div class="total-pelanggaran">Total Pelanggaran: {{$jumlah_pelanggaran}}</div>
+    <div class="total-pelanggaran">Total Pelanggaran: {{$jumlah_pelanggaran}}</div> 
 </div>
 
 <!-- Modal Tambah Desa -->
@@ -17,7 +17,7 @@
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2>Tambah Desa</h2>
-    <form action="/desa" method="post" onsubmit="return validateForm()">
+    <form action="{{url('/tambahdesa')}}" method="post" onsubmit="return validateForm()">
     @csrf  
     <div class="form-group">
         <label for="kode_kecamatan"> <strong>Kecamatan</strong></label>
@@ -31,7 +31,7 @@
         </select>
       </div>
     <div class="form-group">
-          <input type="hidden" name="geojson_des" class="form-control" id="geojson_des" value="xxx">
+          <input type="hidden" name="geojson_des" class="form-control" id="geojson_des" value="xx">
     </div>   
     <div class="form-group">
         <label for="kode_desa"><strong>kode desa</strong></label>

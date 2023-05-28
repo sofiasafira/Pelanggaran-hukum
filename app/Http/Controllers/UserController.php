@@ -45,7 +45,7 @@ class UserController extends Controller
         $kecamatans = Kecamatan::get();
         $desas = Desa::get();
 
-        // dd((string)$desas[0]["kode_des"]);
+        // dd((String)$desas[0]->kode_des);
         
         $direktoris = Direktori::get();
         $klasifikasis = DB::table("klasifikasis")->get();

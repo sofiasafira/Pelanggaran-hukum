@@ -48,9 +48,7 @@ class DesaController extends Controller
     {
         $kecamatans = Kecamatan::get();
         $users = auth()->user();
-        
-
-            
+               
         return view('admin.add_desa', compact('users'), [
             "title" => "Tambah desa",
             'kecamatans' => $kecamatans
@@ -84,51 +82,42 @@ class DesaController extends Controller
         $desa->save();
         // dd($desa);
     
-        return redirect()->back()->withSuccess('desa berhasil ditambahkan');
+        return redirect('desa')->with('success', 'Data Berhasil Ditambah.');
     }
 
     public function edit($kode_des)
     {
-        $desa = Desa::findOrFail($kode_des);
-        $datas_desa = DB::table('desas')
-        ->join('kecamatans', 'desas.kode_kec_id', '=', 'kecamatans.kode_kec')
-        ->join('kabupatens', 'kecamatans.kode_kab_id', '=', 'kabupatens.kode_kab')
-        ->where('kabupatens.kode_kab', '=', auth()->user()->kode_kab_id)
-        ->where('desas.kode_des', '=', $kode_des)
-        ->select('desas.*', 'kecamatans.nama_kec')
-        ->get();
-    
-    
-        $kecamatans =  DB::table('kecamatans')
-        ->join('kabupatens', 'kecamatans.kode_kab_id', '=', 'kabupatens.kode_kab')
-        ->select('kecamatans.*', 'kabupatens.nama_kab')
-        ->get();                      
-    
-        // return view 
-        return view('admin.edit_desa', compact('datas_desa', 'kecamatans', 'desa'), [
-            'title' => 'Edit desa',
-            'kode_des' => $kode_des // Menambahkan kode desa pada view
+        $desa = Desa::with('kecamatans')->firstWhere('kode_des', $kode_des) ; 
+        $kecamatans = Kecamatan::all();                      
+
+        return view('admin.edit_desa', compact('desa', 'kecamatans'), [
+            'title' => 'Edit Desa',
+            'kode_des' => $kode_des // Menambahkan kode des pada view
         ]);
     }
-    
+
     public function update(Request $request, $kode_des)
     {
-        $desa = Desa::findOrFail($kode_des);
-        // dd($desa); // tambahkan ini
-        $desa->kode_des = $request->input('kode_desa');
-        $desa->kode_kec_id = $request->input('kode_kecamatan');
-        $desa->nama_des = $request->input('nama_desa');
-        $desa->save();
-        return redirect()->route('admin.add_desa')->with('success', 'Data Berhasil Diupdate.');
+        // dd('test');;
+        print_r('Testing');
+        $kode_des = $request->input('kode_des');
+        DB::table('desas')
+            ->where('kode_des', $kode_des)
+            ->update([
+                'nama_des' => $request->input('nama_desa')
+            ]);
+
+        return redirect('desa')->with('success', 'Data Berhasil Diupdate.');
+
     }
     
 
-    public function destroy(Desa $kode_desa)
+    public function destroy(Desa $kode_des)
     {
-        // 
-        Desa::destroy($kode_desa);
-    
-        return redirect('admin.add_desa');
+        Klasifikasi::destroy($kode_kec);
+
+
+        return redirect('desa');
     }
     
 

@@ -17,15 +17,15 @@
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2>Tambah kecamatan</h2>
-    <form action="/kecamatan" method="post" onsubmit="return validateForm()">
-    @csrf  
+    <form action="{{url('/tambahkecamatan')}}" method="post" onsubmit="return validateForm()">
+    @csrf 
     <div class="form-group">
     <label for="kode_kabupaten"><strong>Kode Kabupaten</strong></label>
           <input name="kode_kabupaten" class="form-control" id="kode_kabupaten" value="{{ auth()->user()->kode_kab_id}}">
     </div> 
     <div class="form-group">
-          <input type="hidden" name="geojson_kec" class="form-control" id="geojson_kec" value="xxx">
-    </div>   
+    <input type="hidden" name="geojson_kec" class="form-control" id="geojson_kec" value="xx">
+</div>
     <div class="form-group">
         <label for="kode_kecamatan"><strong>kode kecamatan</strong></label>
         <input type="text" name="kode_kecamatan" class="form-control @error('kode_kecamatan') is-invalid @enderror" id="kode_kecamatan" placeholder="kode_kecamatan"  required>
@@ -35,6 +35,10 @@
         </div>
         @enderror
       </div>
+      <!-- <div class="form-group">
+          <label for="kode_kecamatan">Kode Kecamatan</label>
+          <input type="text" class="form-control" id="kode_kecamatan" name="kode_kecamatan" required>
+      </div> -->
       <div class="form-group">
         <label for="nama_kecamatan"><strong>Nama kecamatan</strong></label>
         <input type="text" name="nama_kecamatan" class="form-control @error('nama_kecamatan') is-invalid @enderror" id="nama_kecamatan" placeholder="nama_kecamatan"required>
@@ -44,6 +48,10 @@
         </div>
         @enderror
       </div>
+      <!-- <div class="form-group">
+          <label for="nama_kecamatan">Nama Kecamatan</label>
+          <input type="text" class="form-control" id="nama_kecamatan" name="nama_kecamatan" required>
+      </div> -->
        <input type="submit" value="Submit">
     </form>
   </div>

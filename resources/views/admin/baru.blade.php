@@ -13,6 +13,7 @@
 ?>
 <div class="main-item2">
   <div class="judul-tambah" style="flex: 1; margin-top: 8px; margin-bottom: 20px;"> Tambah Data Pelanggaran {{ auth()->user()->nama_pengadilan }}</div>
+  <div style="flex: 1; margin-top: 0px; margin-bottom: 20px; font-weight: bold;">Keterangan: tanda <span class="required" style="color: red">*</span> wajib diisi </div>
   <form action="/admin" method="post" onsubmit="return validateForm()">
   @csrf
     <div class="left-column">
@@ -37,7 +38,7 @@
       <label for="pemohon"><strong>Pemohon/Penggugat/Saksi</strong> <span class="required">*</span></label>
       <textarea class="form-control" name="pemohon" id="exampleFormControlTextarea1" placeholder="Pemohon" rows="3"></textarea>
 
-      <label for="tersangka"><strong>Tersangka/Terdakwa</strong> <span class="required">*</span></label>
+      <label for="tersangka"><strong>Tersangka/Terdakwa/Tergugat</strong> <span class="required">*</span></label>
       <textarea class="form-control" name="tersangka" id="exampleFormControlTextarea1" placeholder="Tersangka" rows="3"></textarea>
       
       <label for="kecamatan"><strong>Kecamatan</strong> <span class="required">*</span></label>
@@ -99,55 +100,15 @@
   }
 </script>
 
-<!-- <script>
-    // you want to get it of the window global
-    const providerOSM = new GeoSearch.OpenStreetMapProvider();
-
-    //leaflet map
-    var leafletMap = L.map('map', {
-    fullscreenControl: true,
-    // OR
-    fullscreenControl: {
-        pseudoFullscreen: false // if true, fullscreen to page width and height
-    },
-    minZoom: 2
-    }).setView([5.5590904, 95.2926264], 15);
-
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(leafletMap);
-    
-    let theMarker = {};
-
-    leafletMap.on('click',function(e) {
-        let latitude  = e.latlng.lat.toString().substring(0,15);
-        let longitude = e.latlng.lng.toString().substring(0,15);
-
-        let popup = L.popup()
-            .setLatLng([latitude,longitude])
-            .setContent("Kordinat : " + latitude +" - "+  longitude )
-            .openOn(leafletMap);
-
-        if (theMarker != undefined) {
-            leafletMap.removeLayer(theMarker);
-        };
-        theMarker = L.marker([latitude,longitude]).addTo(leafletMap);  
-    });
-
-    const search = new GeoSearch.GeoSearchControl({
-        provider: providerOSM,
-        style: 'bar',
-        searchLabel: 'Sinjai',
-    });
-
-    leafletMap.addControl(search); 
-</script> -->
-
 <script>
-  const map = L.map('map', {
-    center: [5.55505464, 95.2930712],
-    zoom: 14,
-  });
+
+// Buat const map dengan center yang diambil dari tabel user
+const map = L.map('map', {
+  center: [{{auth()->user()->latitude}}, {{auth()->user()->longitude}}],
+  zoom: 13,
+});
+
+
   
   const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 25,
@@ -197,6 +158,21 @@ function getRandomColor(input) {
             }        
         });
         desaLayer.addTo(map);
+    });
+@endforeach
+
+@foreach ($geojson_kabupaten as $kab)
+    $.getJSON("{{ $kab->geojson_kab }}", function(data) {
+        var kabupatenLayer = L.geoJSON(data, {
+            style: {
+                color: 'black', // set warna garis pinggir menjadi hitam
+                weight: 1,
+                opacity: 1,
+                dashArray: '3',
+                fillOpacity: 0.2,
+            },      
+        });
+        kabupatenLayer.addTo(map);
     });
 @endforeach
 
